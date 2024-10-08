@@ -30,12 +30,12 @@ export const meta: MetaFunction = () => {
 
 export function loader() {
   return {
-    stableRandom: Math.random(),
+    stableSuggestion: getRandomSuggestion(Math.random()),
   };
 }
 
 export default function Index() {
-  const { stableRandom } = useLoaderData<typeof loader>();
+  const { stableSuggestion } = useLoaderData<typeof loader>();
   const [value, setValue] = useState("");
 
   return (
@@ -50,10 +50,16 @@ export default function Index() {
 
         <Surface className="p-2 elevated border border-interactive rounded-default block mt-6 shadow-1">
           <MultilineInput
-            placeholder={getRandomSuggestion(stableRandom)}
+            placeholder={stableSuggestion}
             className="w-full min-h-20 resize-none"
             value={value}
             onChange={(e) => setValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (value === "" && e.key === "Tab") {
+                e.preventDefault();
+                setValue(stableSuggestion);
+              }
+            }}
           />
 
           <View className="flex-row mt-2 justify-between">

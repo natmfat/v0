@@ -5,7 +5,7 @@ export type Palette = {
 
 export const palettes: Palette[] = [
   {
-    name: "Replits Light",
+    name: "Replit Light",
     colors: ["#ebeced", "#fcfcfc", "#6bb5ff", "#0f87ff"],
   },
   {
