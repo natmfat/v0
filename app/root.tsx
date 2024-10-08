@@ -1,3 +1,4 @@
+import type { LinksFunction } from "@remix-run/node";
 import {
   Links,
   Meta,
@@ -5,11 +6,13 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import { ThemeProvider } from "tanukui/components/ThemeProvider.js";
+import { View } from "tanukui/components/View.js";
+import "tanukui/styles/core.css";
+import "tanukui/styles/themes/light.css";
 
 import "./tailwind.css";
-import "tanukui/styles/core.css";
-import "tanukui/styles/themes/dark.css";
+
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -32,8 +35,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body data-theme="dark">
-        {children}
+      <body data-theme="light">
+        <ThemeProvider defaultValue="light">{children}</ThemeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

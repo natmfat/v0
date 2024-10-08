@@ -13,4 +13,8 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  ssr: {
+    noExternal: ["tanukui"],
+  },
+  assetsInclude: ["**/*.md"],
 });

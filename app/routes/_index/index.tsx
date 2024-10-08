@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { useId, useRef, useState } from "react";
+import { useState } from "react";
 import { Button } from "tanukui/components/Button.js";
 import { Heading } from "tanukui/components/Heading.js";
 import { IconButton } from "tanukui/components/IconButton.js";
@@ -14,28 +14,32 @@ import { RiArrowRightUpIcon } from "tanukui/icons/RiArrowRightUpIcon.js";
 import { RiImageIcon } from "tanukui/icons/RiImageIcon.js";
 import { RiLockUnlockIcon } from "tanukui/icons/RiLockUnlockIcon.js";
 
-import { SelectPalette } from "../components/SelectPalette";
-import { getRandomSuggestion, suggestions } from "../lib/suggestions";
+import { SelectPalette } from "./components/SelectPalette";
+import { getRandomSuggestion, suggestions } from "./lib/suggestions";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "v0" },
+    {
+      name: "description",
+      content:
+        "Generate UI with repl-community/ui from text prompts and images.",
+    },
   ];
 };
 
 export function loader() {
   return {
-    serverRandom: Math.random(),
+    stableRandom: Math.random(),
   };
 }
 
 export default function Index() {
-  const { serverRandom } = useLoaderData<typeof loader>();
+  const { stableRandom } = useLoaderData<typeof loader>();
   const [value, setValue] = useState("");
 
   return (
-    <View className="text-center items-center">
+    <View className="max-w-3xl w-full mx-auto px-6 h-full text-center items-center">
       <View className="max-w-lg w-full mx-auto">
         <Heading level={1} className="mt-28">
           Generate. Refine. Ship.
@@ -46,7 +50,7 @@ export default function Index() {
 
         <Surface className="p-2 elevated border border-interactive rounded-default block mt-6 shadow-1">
           <MultilineInput
-            placeholder={getRandomSuggestion(serverRandom)}
+            placeholder={getRandomSuggestion(stableRandom)}
             className="w-full min-h-20 resize-none"
             value={value}
             onChange={(e) => setValue(e.target.value)}

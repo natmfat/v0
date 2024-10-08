@@ -15,10 +15,14 @@
     "@remix-run/node": "^2.12.1",
     "@remix-run/react": "^2.12.1",
     "@remix-run/serve": "^2.12.1",
+    "ai": "^3.4.9",
     "isbot": "^4.1.0",
+    "ollama-ai-provider": "^0.15.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tanukui": "^0.0.61"
+    "tanukui": "^0.0.61",
+    "zod": "^3.23.8",
+    "zustand": "5.0.0-rc.2"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.12.1",
