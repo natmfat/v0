@@ -34,7 +34,7 @@ export const meta: MetaFunction = () => {
 export async function loader() {
   return {
     stableSuggestion: getRandomSuggestion(Math.random()),
-    palettes: await ModelPalette.getAll(),
+    palettes: await ModelPalette.findAll(),
   };
 }
 

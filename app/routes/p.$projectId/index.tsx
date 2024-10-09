@@ -2,7 +2,7 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { View } from "tanukui/components/View.js";
 import { notFound, requireTruthy } from "~/lib/utils.server";
-import { ModelProject } from "~/models.server";
+import { ModelPreview, ModelProject } from "~/models.server";
 
 import Header from "./components/Header";
 import { PanelHistory } from "./components/PanelHistory";
@@ -19,14 +19,18 @@ export async function loader({ params }: LoaderFunctionArgs) {
   requireTruthy(params.projectId, notFound());
   const project = await ModelProject.find({ id: params.projectId });
   requireTruthy(project, notFound());
+  const previews = await ModelPreview.find({ project_id: params.projectId });
 
   return {
-    ...project,
+    project,
+    previews,
   };
 }
 
 export default function Project() {
-  const { project_prompt } = useLoaderData<typeof loader>();
+  const {
+    project: { project_prompt },
+  } = useLoaderData<typeof loader>();
   useProjectStore.setState({ initialPrompt: project_prompt });
 
   return (

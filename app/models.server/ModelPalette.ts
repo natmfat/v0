@@ -18,7 +18,7 @@ export async function create({
   `;
 }
 
-export async function getAll() {
+export async function findAll() {
   const palettes = await sql<Palette[]>`SELECT * FROM palette_`;
 
   return palettes;

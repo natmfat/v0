@@ -3,7 +3,7 @@ import { ModelPalette } from "~/models.server";
 
 await initPalettes();
 await initProjects();
-await initProjectPreviews();
+await initPreviews();
 process.exit(0);
 
 /* Create color palettes  */
@@ -40,8 +40,8 @@ async function initProjects() {
   )`;
 }
 
-async function initProjectPreviews() {
-  await sql`CREATE TABLE IF NOT EXISTS project_preview_ (
+async function initPreviews() {
+  await sql`CREATE TABLE IF NOT EXISTS preview_ (
     id bigint UNIQUE GENERATED ALWAYS AS IDENTITY,
     project_id uuid REFERENCES project_(id),
     version smallint DEFAULT 0,

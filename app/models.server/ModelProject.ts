@@ -1,5 +1,4 @@
 import { sql } from "~/database.server";
-import { Nullable } from "~/lib/type";
 
 import { Palette } from "./ModelPalette";
 
@@ -8,8 +7,6 @@ export type Project = {
   palette_id: number;
   prompt: string;
 };
-
-// LEFT JOIN project_preview_ ON project_preview_.project_id = project_.id
 
 export async function find({ id }: Pick<Project, "id">) {
   const project = await sql<
@@ -20,7 +17,7 @@ export async function find({ id }: Pick<Project, "id">) {
       palette_raw_css: Palette["thumbnail_colors"];
     }>
   >`
-    SELECT project_.prompt AS project_prompt, palette_.name AS palette_name, palette_.thumbnail_colors as palette_thumbnail_colors, palette_.raw_css as palette_raw_css FROM project_
+    SELECT project_.prompt AS project_prompt, palette_.name AS palette_name, palette_.thumbnail_colors AS palette_thumbnail_colors, palette_.raw_css AS palette_raw_css FROM project_
     JOIN palette_ ON project_.palette_id = palette_.id
     WHERE project_.id = ${id};
   `;
