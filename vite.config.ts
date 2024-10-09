@@ -16,5 +16,5 @@ export default defineConfig({
   ssr: {
     noExternal: ["tanukui"],
   },
-  assetsInclude: ["**/*.md"],
+  assetsInclude: ["**/*.txt"],
 });

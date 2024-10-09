@@ -45,11 +45,6 @@ export default function Project() {
     project: { project_prompt },
     previews,
   } = useLoaderData<typeof loader>();
-  // const { revalidate } = useRevalidator();
-  // useEffect(() => {
-  //   console.log(chunk);
-  //   revalidate();
-  // }, [revalidate, chunk]);
 
   return (
     <ProjectStoreProvider

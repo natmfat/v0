@@ -1,12 +1,11 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { convertToCoreMessages, streamText } from "ai";
 import { ollama } from "ollama-ai-provider";
-import { emitter } from "~/.server/emitter";
 import { ModelPreview, ModelProject } from "~/.server/models";
 import { notFound, requireTruthy } from "~/lib/utils.server";
 
 import { eventStream } from "./lib/eventStream";
-import systemPrompt from "./lib/systemPrompt.md?raw";
+import systemPrompt from "./lib/systemPrompt.txt?raw";
 
 export function createRoute(projectId: string) {
   return `/api/ollama/${projectId}/v0`;
@@ -24,29 +23,31 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       messages: convertToCoreMessages([
         {
           role: "system",
-          content: "say hello.",
+          content: systemPrompt,
         },
         {
           role: "user",
-          content: "how are you?",
+          content: `User: ${prompt}`,
         },
       ]),
       onFinish: async ({ text }) => {
+        // @todo renable this after dev
         // await ModelPreview.updateCode({ id: preview.id, code: text });
         send({ event: "complete", data: text });
       },
     });
 
-    // https://sdk.vercel.ai/docs/reference/ai-sdk-core/stream-text
-    let textAccumulator: string[] = [];
+    // stream in bigger phrases rather than single words,
+    // I think less browser communication w/ bigger packets is probably better?
+    let acc: string[] = [];
     for await (const textPart of textStream) {
-      textAccumulator.push(textPart);
-      if (textAccumulator.length > 5) {
-        send({ event: "message", data: textAccumulator.join("") });
-        textAccumulator = [];
+      acc.push(textPart);
+      if (acc.length > 10) {
+        send({ event: "message", data: acc.join("") });
+        acc = [];
       }
     }
 
-    send({ event: "message", data: textAccumulator.join("") });
+    send({ event: "message", data: acc.join("") });
   });
 }

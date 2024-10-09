@@ -12,6 +12,7 @@ import { RiSmartphoneIcon } from "tanukui/icons/RiSmartphoneIcon.js";
 import { RiTabletIcon } from "tanukui/icons/RiTabletIcon.js";
 
 import { usePreviewStream } from "../../hooks/usePreviewStream";
+import { generateCode } from "../../lib/generateCode";
 
 export function PanelPreview() {
   const preview = usePreviewStream();
@@ -58,15 +59,18 @@ export function PanelPreview() {
       </View>
 
       <View className="h-full flex-1">
-        {/* <iframe
-          title="Component Preview"
-          srcDoc=""
-          className="border border-interactive rounded-default h-full flex-1"
-        /> */}
-        {preview.code}
+        {preview.loading ? null : (
+          <iframe
+            title="Component Preview"
+            srcDoc={generateCode(preview.code)}
+            className="border border-interactive rounded-default h-full flex-1"
+          />
+        )}
 
-        {/* @todo 3 variants */}
+        {preview.code}
       </View>
     </Surface>
   );
 }
+
+// @todo create 3 variants, like v0

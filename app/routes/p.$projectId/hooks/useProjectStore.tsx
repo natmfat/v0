@@ -17,7 +17,7 @@ type State = {
   /** version 0 query that the user submitted */
   initialPrompt: string;
 
-  previews: Array<Preview>;
+  previews: Array<Preview & { loading?: boolean }>;
   selectedVersion: number;
   layout: `${Layout}`;
 
@@ -33,7 +33,7 @@ type Action = {
   // @todo add preview, set picker enabled, set selected element, setlayout, and so on
 };
 
-type ProjectStore = ReturnType<typeof createProjectStore>;
+export type ProjectStore = ReturnType<typeof createProjectStore>;
 
 export const createProjectStore = (initialState: Partial<State>) =>
   create<State & Action>()(
