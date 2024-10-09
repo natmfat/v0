@@ -14,6 +14,8 @@ import { spaceTokens } from "tanukui/lib/tokens.js";
 export function RevisionsInput() {
   const [value, setValue] = useState("");
 
+  // const [messages, setMessages] = useState<ConvertibleMessage[]>([]);
+  //   const [answer, setAnswer] = useState<string[]>([]);
   return (
     <Surface
       elevated
