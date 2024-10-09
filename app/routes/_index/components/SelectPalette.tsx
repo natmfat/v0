@@ -8,27 +8,38 @@ import {
 } from "tanukui/components/Select.js";
 import { View, ViewProps } from "tanukui/components/View.js";
 import { cn } from "tanukui/lib/cn.js";
+import { ModelPalette } from "~/models.server";
 
-import { DEFAULT_PALETTE, Palette, palettes } from "../lib/palettes";
-
-export function SelectPalette() {
-  const [value, setValue] = useState(DEFAULT_PALETTE);
-  const paletteValue = useMemo(
-    () => palettes.find((palette) => palette.name === value)!,
-    [value],
+export function SelectPalette({
+  palettes,
+}: {
+  palettes: ModelPalette.Palette[];
+}) {
+  const [value, setValue] = useState(palettes[0].id.toString() as string);
+  const selectedPalette = useMemo(
+    () => palettes.find((palette) => palette.id.toString() === value)!,
+    [value, palettes],
   );
 
   return (
-    <Select value={value} onValueChange={setValue}>
+    <Select
+      name="palette_id"
+      value={value}
+      defaultValue={value}
+      onValueChange={setValue}
+    >
       <SelectTrigger>
-        <SelectValue aria-label={value}>
-          <PalettePreview colors={paletteValue.colors} className="mr-2" />
+        <SelectValue aria-label={value.toString()}>
+          <PaletteThumbnail
+            colors={selectedPalette.thumbnail_colors}
+            className="mr-2"
+          />
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {palettes.map(({ name, colors }) => (
-          <SelectItem key={name} value={name}>
-            <PalettePreview colors={colors} />
+        {palettes.map(({ id, name, thumbnail_colors }) => (
+          <SelectItem key={id} value={id.toString()}>
+            <PaletteThumbnail colors={thumbnail_colors} />
             {name}
           </SelectItem>
         ))}
@@ -37,11 +48,11 @@ export function SelectPalette() {
   );
 }
 
-export function PalettePreview({
+export function PaletteThumbnail({
   colors,
   className,
   ...props
-}: ViewProps & { colors: Palette["colors"] }) {
+}: ViewProps & { colors: ModelPalette.Palette["thumbnail_colors"] }) {
   return (
     <View
       className={cn("flex-row rounded-md overflow-hidden", className)}

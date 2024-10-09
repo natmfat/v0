@@ -7,10 +7,10 @@ import { View } from "tanukui/components/View.js";
 import { RiLockUnlockIcon } from "tanukui/icons/RiLockUnlockIcon.js";
 import { spaceTokens } from "tanukui/lib/tokens.js";
 
-import { useStore } from "../hooks/useStore";
+import { useProjectStore } from "../hooks/useProjectStore";
 
 export default function Header() {
-  const query = useStore((state) => state.initialQuery);
+  const prompt = useProjectStore((state) => state.initialPrompt);
 
   return (
     <header className="flex flex-row items-center justify-between flex-grow-0 flex-shrink-0">
@@ -22,7 +22,7 @@ export default function Header() {
             size={spaceTokens.space32}
           />
           <Separator orientation="vertical" className="h-8" />
-          <Text className="max-w-80">{query}</Text>
+          <Text className="max-w-80">{prompt}</Text>
         </View>
 
         <Pill color="transparent">

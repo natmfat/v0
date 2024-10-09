@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { Button } from "tanukui/components/Button.js";
 import { Heading } from "tanukui/components/Heading.js";
@@ -13,9 +13,12 @@ import { RiArrowRightIcon } from "tanukui/icons/RiArrowRightIcon.js";
 import { RiArrowRightUpIcon } from "tanukui/icons/RiArrowRightUpIcon.js";
 import { RiImageIcon } from "tanukui/icons/RiImageIcon.js";
 import { RiLockUnlockIcon } from "tanukui/icons/RiLockUnlockIcon.js";
+import { ModelPalette } from "~/models.server";
 
 import { SelectPalette } from "./components/SelectPalette";
 import { getRandomSuggestion, suggestions } from "./lib/suggestions";
+
+export { action } from "./action.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -28,14 +31,15 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export function loader() {
+export async function loader() {
   return {
     stableSuggestion: getRandomSuggestion(Math.random()),
+    palettes: await ModelPalette.getAll(),
   };
 }
 
 export default function Index() {
-  const { stableSuggestion } = useLoaderData<typeof loader>();
+  const { stableSuggestion, palettes } = useLoaderData<typeof loader>();
   const [value, setValue] = useState("");
 
   return (
@@ -47,42 +51,48 @@ export default function Index() {
         <Text multiline className="mt-1">
           Generate UI with repl-community/ui from text prompts and images.
         </Text>
-
-        <Surface className="p-2 elevated border border-interactive rounded-default block mt-6 shadow-1">
-          <MultilineInput
-            placeholder={stableSuggestion}
-            className="w-full min-h-20 resize-none"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (value === "" && e.key === "Tab") {
-                e.preventDefault();
-                setValue(stableSuggestion);
-              }
-            }}
-          />
-
-          <View className="flex-row mt-2 justify-between">
-            <View className="flex-row gap-2">
-              <Button size={16} color="transparent">
-                <RiImageIcon />
-                Image
-              </Button>
-              <Button size={16} color="transparent">
-                <RiLockUnlockIcon />
-                Public
-              </Button>
-
-              <SelectPalette />
+        <Surface
+          className="p-2 elevated border border-interactive rounded-default block mt-6 shadow-1"
+          asChild
+        >
+          <Form method="POST">
+            <MultilineInput
+              placeholder={stableSuggestion}
+              className="w-full min-h-20 resize-none"
+              name="prompt"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (value === "" && e.key === "Tab") {
+                  e.preventDefault();
+                  setValue(stableSuggestion);
+                }
+              }}
+            />
+            <View className="flex-row mt-2 justify-between">
+              <View className="flex-row gap-2">
+                <Button size={16} color="transparent" type="button">
+                  <RiImageIcon />
+                  Image
+                </Button>
+                <Button size={16} color="transparent" type="button">
+                  <RiLockUnlockIcon />
+                  Public
+                </Button>
+                <SelectPalette palettes={palettes} />
+              </View>
+              <IconButton
+                alt="Submit"
+                className="h-8 w-8"
+                size={28}
+                type="submit"
+              >
+                <RiArrowRightIcon />
+              </IconButton>
             </View>
-
-            <IconButton alt="Submit" className="h-8 w-8" size={28}>
-              <RiArrowRightIcon />
-            </IconButton>
-          </View>
+          </Form>
         </Surface>
       </View>
-
       <View className="flex-row mt-6 gap-2">
         {Object.keys(suggestions).map((key) => (
           <Pill

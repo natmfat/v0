@@ -128,7 +128,7 @@ export class ResourceBuilder {
       // validate everything
       const validate = action.validate || {};
       try {
-        const [headers, params, query, body] = await Promise.all([
+        const [headers, params, query, body, formData] = await Promise.all([
           this.validate(
             "headers",
             Object.fromEntries(args.request.headers),
@@ -137,16 +137,15 @@ export class ResourceBuilder {
           this.validate("params", args.params, validate.params),
           this.validate("query", url.searchParams, validate.query),
           this.validate("body", rawBody, validate.body),
+          this.validate("formData", rawFormData, validate.formData),
         ]);
 
-        const baseHandlerArgs = { headers, params, query, body };
         return action.handler({
-          ...baseHandlerArgs,
-          formData: await this.validate(
-            "formData",
-            rawFormData,
-            validate.formData,
-          ),
+          headers,
+          params,
+          query,
+          body,
+          formData,
           context: { request: args.request },
         });
       } catch (error) {

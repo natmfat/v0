@@ -11,10 +11,11 @@ import { RiPaintIcon } from "tanukui/icons/RiPaintIcon.js";
 import { RiSmartphoneIcon } from "tanukui/icons/RiSmartphoneIcon.js";
 import { RiTabletIcon } from "tanukui/icons/RiTabletIcon.js";
 
-import { useStore } from "../../hooks/useStore";
+import { useProjectStore } from "../../hooks/useProjectStore";
 
 export function PanelPreview() {
-  const query = useStore((store) => store.initialQuery);
+  // @todo use currently selected prompt, not inital prompt
+  const prompt = useProjectStore((store) => store.initialPrompt);
 
   return (
     <Surface
@@ -26,7 +27,7 @@ export function PanelPreview() {
           className="px-3 py-1 select-none flex-shrink max-w-full overflow-hidden h-fit rounded-full cursor-pointer"
           elevated
         >
-          <Text className="w-full flex-1">{query}</Text>
+          <Text className="w-full flex-1">{prompt}</Text>
         </Surface>
 
         <View className="flex-row gap-2 w-fit">

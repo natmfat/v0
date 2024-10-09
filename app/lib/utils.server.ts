@@ -93,8 +93,7 @@ export type StandardResponse = {
 };
 
 export function logStandardError(error: unknown, message: string) {
-  console.error(error);
   const fMessage = formatMessage(message);
-  console.log(fMessage);
+  console.error(error, fMessage);
   return standard(false, fMessage, { error });
 }

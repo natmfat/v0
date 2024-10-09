@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import { Nullable } from "~/lib/type";
 
 export type Preview = {
   /* Code iteration  */
@@ -28,11 +29,9 @@ export enum Layout {
   FULL_SCREEN = "fullscreen",
 }
 
-type Nullable<T> = T | null;
-
 type State = {
   /** version 0 query that the user submitted */
-  initialQuery: string;
+  initialPrompt: string;
 
   /**  */
   history: Preview[];
@@ -45,14 +44,16 @@ type State = {
 
 type Action = {
   setSelectedVersion: (version: number) => void;
+
+  // @todo add preview, set picker enabled, set selected element, setlayout, and so on
 };
 
-export const useStore = create<State & Action>()(
+export const useProjectStore = create<State & Action>()(
   immer((set) => ({
     history: [],
     selectedVersion: 0,
     layout: Layout.DESKTOP,
-    initialQuery: "",
+    initialPrompt: "",
     pickerEnabled: false,
     pickerSelectedElement: null,
     setSelectedVersion: (version) =>
@@ -61,8 +62,5 @@ export const useStore = create<State & Action>()(
       }),
   })),
 );
-
-export const setInitialState = (state: Partial<State>) =>
-  useStore.setState(state);
 
 // @todo postgres actually save projects, previews, and stuff

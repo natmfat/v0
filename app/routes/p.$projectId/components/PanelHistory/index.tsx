@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Heading } from "tanukui/components/Heading.js";
 import { IconButton } from "tanukui/components/IconButton.js";
-import { Interactive } from "tanukui/components/Interactive.js";
-import { Pill } from "tanukui/components/Pill.js";
 import { Surface } from "tanukui/components/Surface.js";
 import { View } from "tanukui/components/View.js";
 import { RiArrowLeftDoubleIcon } from "tanukui/icons/RiArrowLeftDoubleIcon.js";
