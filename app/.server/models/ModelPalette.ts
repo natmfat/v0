@@ -1,4 +1,4 @@
-import { sql } from "~/database.server";
+import { sql } from "~/.server/database";
 
 export type Palette = {
   id: number;

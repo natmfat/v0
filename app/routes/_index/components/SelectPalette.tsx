@@ -8,7 +8,7 @@ import {
 } from "tanukui/components/Select.js";
 import { View, ViewProps } from "tanukui/components/View.js";
 import { cn } from "tanukui/lib/cn.js";
-import { ModelPalette } from "~/models.server";
+import { ModelPalette } from "~/.server/models";
 
 export function SelectPalette({
   palettes,

@@ -1,4 +1,4 @@
-import { sql } from "~/database.server";
+import { sql } from "~/.server/database";
 
 import { Palette } from "./ModelPalette";
 
@@ -7,6 +7,17 @@ export type Project = {
   palette_id: number;
   prompt: string;
 };
+
+export async function findPrompt({ id }: Pick<Project, "id">) {
+  const project = await sql<Array<Pick<Project, "prompt">>>`
+    SELECT prompt FROM project_
+    WHERE project_.id = ${id};
+  `;
+  if (project.length === 0) {
+    return null;
+  }
+  return project[0].prompt;
+}
 
 export async function find({ id }: Pick<Project, "id">) {
   const project = await sql<
@@ -31,7 +42,7 @@ export async function create({
   prompt,
   palette_id,
 }: Pick<Project, "prompt" | "palette_id">) {
-  const project = await sql<Project[]>`
+  const project = await sql<Pick<Project, "id">[]>`
     INSERT INTO project_ (prompt, palette_id)
     VALUES (${prompt}, ${palette_id})
     RETURNING id

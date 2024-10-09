@@ -24,8 +24,10 @@
     "postgres": "^3.4.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "remix-utils": "^7.7.0",
     "tanukui": "^0.0.61",
     "tsx": "^4.19.1",
+    "typed-emitter": "^2.1.0",
     "zod": "^3.23.8",
     "zod-form-data": "^2.0.2",
     "zustand": "5.0.0-rc.2"

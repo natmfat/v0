@@ -2,13 +2,16 @@ import { convertToCoreMessages, streamText } from "ai";
 import { ollama } from "ollama-ai-provider";
 import { z } from "zod";
 import { ResourceBuilder } from "~/lib/ResourceBuilder";
-import systemPrompt from "~/lib/systemPrompt.md?raw";
+
+// import systemPrompt from "~/lib/systemPrompt.md?raw";
+//
+const systemPrompt = "";
 
 // @todo create project ({ prompt, initalized (default to false, turn to true later) })
 // @todo store user messages associated with project
 export const ROUTE = "/api/ollama";
 export enum Intent {
-  GENERATE = "generate",
+  GENERATE_V0 = "generate_v0",
 }
 
 // potential pipeline:
@@ -23,31 +26,28 @@ export enum Intent {
 export const action = new ResourceBuilder()
   .register({
     method: "POST",
-    intent: Intent.GENERATE,
+    intent: Intent.GENERATE_V0,
     validate: {
       body: z.object({
-        messages: z.array(
-          z.object({
-            role: z.union([
-              z.literal("system"),
-              z.literal("user"),
-              z.literal("assistant"),
-            ]),
-            content: z.string(),
-          }),
-        ),
+        project_id: z.string(),
+        prompt: z.string(),
       }),
     },
-    handler: async ({ body: { messages } }) => {
+    handler: async ({ body: { project_id, prompt } }) => {
       const result = await streamText({
-        model: ollama("llama3.2:latest", {}),
+        model: ollama("llama3.2:latest"),
         messages: convertToCoreMessages([
           {
             role: "system",
             content: systemPrompt,
           },
-          ...messages,
+          {
+            role: "user",
+            content: prompt,
+          },
         ]),
+        onChunk: (chunk) => {},
+        onFinish: () => {},
       });
 
       return result.toDataStreamResponse();

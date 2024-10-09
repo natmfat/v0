@@ -11,11 +11,10 @@ import { RiPaintIcon } from "tanukui/icons/RiPaintIcon.js";
 import { RiSmartphoneIcon } from "tanukui/icons/RiSmartphoneIcon.js";
 import { RiTabletIcon } from "tanukui/icons/RiTabletIcon.js";
 
-import { useProjectStore } from "../../hooks/useProjectStore";
+import { usePreviewStream } from "../../hooks/usePreviewStream";
 
 export function PanelPreview() {
-  // @todo use currently selected prompt, not inital prompt
-  const prompt = useProjectStore((store) => store.initialPrompt);
+  const preview = usePreviewStream();
 
   return (
     <Surface
@@ -27,7 +26,7 @@ export function PanelPreview() {
           className="px-3 py-1 select-none flex-shrink max-w-full overflow-hidden h-fit rounded-full cursor-pointer"
           elevated
         >
-          <Text className="w-full flex-1">{prompt}</Text>
+          <Text className="w-full flex-1">{preview.prompt}</Text>
         </Surface>
 
         <View className="flex-row gap-2 w-fit">
@@ -59,11 +58,12 @@ export function PanelPreview() {
       </View>
 
       <View className="h-full flex-1">
-        <iframe
+        {/* <iframe
           title="Component Preview"
           srcDoc=""
           className="border border-interactive rounded-default h-full flex-1"
-        />
+        /> */}
+        {preview.code}
 
         {/* @todo 3 variants */}
       </View>

@@ -1,7 +1,9 @@
 import { redirect } from "@remix-run/node";
 import { zfd } from "zod-form-data";
+import { ModelPreview, ModelProject } from "~/.server/models";
 import { ResourceBuilder } from "~/lib/ResourceBuilder";
-import { ModelProject } from "~/models.server";
+
+// @todo error handling or something?
 
 export const action = new ResourceBuilder()
   .register({
@@ -13,8 +15,13 @@ export const action = new ResourceBuilder()
       }),
     },
     handler: async ({ formData }) => {
-      // @todo error handling or something?
       const project = await ModelProject.create(formData);
+      await ModelPreview.create({
+        project_id: project.id,
+        version: 0,
+        prompt: formData.prompt,
+        code: "",
+      });
       return redirect(`p/${project.id}`);
     },
   })

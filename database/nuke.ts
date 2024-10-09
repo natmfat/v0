@@ -1,5 +1,6 @@
-import { sql } from "~/database.server";
+import { sql } from "~/.server/database";
 
+// who needs database migrations???
 await nukeDatabase();
 process.exit(0);
 

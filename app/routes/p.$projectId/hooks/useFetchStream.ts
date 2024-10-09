@@ -40,7 +40,10 @@ export function useFetchStream({ api, onChunk, onComplete }: FetchStreamArgs) {
 async function streamResponse({
   response,
   onChunk,
-}: StreamResponseArgs): Promise<string[]> {
+}: {
+  response: Response;
+  onChunk: FetchStreamArgs["onChunk"];
+}): Promise<string[]> {
   if (!response.body) {
     return [];
   }

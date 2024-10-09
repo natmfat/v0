@@ -1,5 +1,5 @@
-import { sql } from "~/database.server";
-import { ModelPalette } from "~/models.server";
+import { sql } from "~/.server/database";
+import { ModelPalette } from "~/.server/models";
 
 await initPalettes();
 await initProjects();
@@ -46,7 +46,8 @@ async function initPreviews() {
     project_id uuid REFERENCES project_(id),
     version smallint DEFAULT 0,
     prompt text NOT NULL,
-    code text NOT NULL,
-    thumbnail_src text NOT NULL
+    code text,
+    thumbnail_src text,
+    UNIQUE (project_id, version)
   )`;
 }

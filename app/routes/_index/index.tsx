@@ -13,7 +13,7 @@ import { RiArrowRightIcon } from "tanukui/icons/RiArrowRightIcon.js";
 import { RiArrowRightUpIcon } from "tanukui/icons/RiArrowRightUpIcon.js";
 import { RiImageIcon } from "tanukui/icons/RiImageIcon.js";
 import { RiLockUnlockIcon } from "tanukui/icons/RiLockUnlockIcon.js";
-import { ModelPalette } from "~/models.server";
+import { ModelPalette } from "~/.server/models";
 
 import { SelectPalette } from "./components/SelectPalette";
 import { getRandomSuggestion, suggestions } from "./lib/suggestions";
