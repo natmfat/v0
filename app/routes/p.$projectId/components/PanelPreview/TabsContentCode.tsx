@@ -22,11 +22,11 @@ export function TabsContentCode({
   const { addToast } = useContext(ToastContext);
 
   return (
-    <TabsContent value={value} className="h-full flex-1">
-      <View className="rounded-default overflow-hidden h-full flex-1 max-w-full font-mono [&>span]:h-full relative border">
+    <TabsContent value={value} asChild>
+      <View className="flex-1 max-h-full overflow-hidden relative rounded-default font-mono flex [&>span]:h-full">
         <Button
           size={12}
-          className="absolute top-2 right-2"
+          className="absolute bottom-2 right-2"
           color="transparent"
           onClick={() => {
             addToast({

@@ -27,7 +27,7 @@ export function PreviewFrame({ code }: Pick<Preview, "code">) {
   }, [layout, showCode]);
 
   return (
-    <View className="h-full w-full flex-row gap-2">
+    <View className="h-full w-full max-h-full overflow-hidden flex-1 flex-row gap-2">
       <View className="w-full h-full rounded-default overflow-hidden flex-1 border items-center px-4">
         <View
           ref={containerRef}

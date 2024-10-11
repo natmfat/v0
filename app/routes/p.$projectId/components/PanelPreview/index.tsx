@@ -117,18 +117,18 @@ export function PanelPreview() {
         </View>
       </View>
 
-      <View className="h-full flex-1 grid place-items-center">
-        {streaming ? (
+      {streaming ? (
+        <View className="h-full flex-1 grid place-items-center">
           <View className="gap-1 flex-row items-center">
             <RiLoader2Icon className="animate-[spin_2s_linear_infinite]" />
             <Text size="small" color="dimmer">
               Building your ideas
             </Text>
           </View>
-        ) : (
-          <PreviewFrame {...preview} />
-        )}
-      </View>
+        </View>
+      ) : (
+        <PreviewFrame {...preview} />
+      )}
     </Surface>
   );
 }

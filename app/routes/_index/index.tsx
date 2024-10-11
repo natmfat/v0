@@ -119,7 +119,7 @@ export default function Index() {
       <View className="mt-28 grid grid-cols-3 gap-4 w-full">
         {projects.map((project) => (
           <Link key={project.project_id} to={createRoute(project.project_id)}>
-            <View className="gap-2">
+            <View className="gap-2 text-center">
               <Interactive>
                 <img src={project.thumbnail_src} alt={project.prompt} />
               </Interactive>
