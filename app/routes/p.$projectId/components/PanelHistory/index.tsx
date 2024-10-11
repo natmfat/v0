@@ -19,7 +19,7 @@ export function PanelHistory() {
     <Surface
       elevated
       className={cn(
-        "rounded-default overflow-hidden max-h-full h-fit p-2 duration-chill transition-all gap-2 justify-stretch",
+        "rounded-default overflow-hidden max-h-full h-fit p-2 duration-chill transition-all justify-stretch",
         expanded && "w-48",
       )}
     >
@@ -43,7 +43,7 @@ export function PanelHistory() {
         </IconButton>
       </View>
 
-      <View className="flex-1 gap-2 overflow-y-auto">
+      <View className="flex-1 pt-2 gap-2 overflow-y-auto">
         {previews.map((preview) => (
           <HistoryPreview
             key={preview.id}

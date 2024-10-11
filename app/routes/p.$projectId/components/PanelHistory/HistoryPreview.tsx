@@ -3,6 +3,12 @@ import { Interactive } from "tanukui/components/Interactive.js";
 import { Loading } from "tanukui/components/Loading.js";
 import { Pill, PillProps } from "tanukui/components/Pill.js";
 import { Surface } from "tanukui/components/Surface.js";
+import { Text } from "tanukui/components/Text.js";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "tanukui/components/Tooltip.js";
 import { View } from "tanukui/components/View.js";
 import { cn } from "tanukui/lib/cn.js";
 import { type Preview } from "~/.server/models/ModelPreview";
@@ -40,28 +46,56 @@ export function HistoryPreview({ mini, active, preview }: HistoryPreviewProps) {
   }
 
   return (
-    <Interactive>
-      <Loading loading={!preview.thumbnail_src}>
-        <View
-          onClick={onClick}
-          className={cn(
-            "h-24 rounded-default overflow-hidden",
-            active && "border-primary-dimmer active:border-primary-default",
-          )}
-        >
-          {preview.thumbnail_src ? (
-            <img
-              alt={preview.prompt}
-              src={preview.thumbnail_src}
-              className="h-full w-full object-cover object-top"
-            />
-          ) : null}
-          <Surface elevated className="absolute bottom-1 left-1 bg-transparent">
-            <MiniHistoryPreview {...{ active, preview }} />
-          </Surface>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Interactive>
+          <View
+            className={cn(
+              "relative overflow-hidden rounded-default",
+              active && "border-primary-dimmer active:border-primary-default",
+            )}
+            onClick={onClick}
+          >
+            <Loading loading={!preview.thumbnail_src}>
+              <View className="h-24">
+                {preview.thumbnail_src ? (
+                  <img
+                    alt={preview.prompt}
+                    src={preview.thumbnail_src}
+                    className="h-full w-full object-cover object-top"
+                  />
+                ) : null}
+              </View>
+            </Loading>
+
+            <Surface
+              elevated
+              className="absolute bottom-1 left-1 bg-transparent"
+            >
+              <MiniHistoryPreview {...{ active, preview }} />
+            </Surface>
+          </View>
+        </Interactive>
+      </TooltipTrigger>
+      <TooltipContent side="right">
+        <View className="gap-1 max-w-44">
+          <Loading loading={!preview.thumbnail_src}>
+            <View className="h-24 border border-interactive rounded-default overflow-hidden">
+              {preview.thumbnail_src ? (
+                <img
+                  alt={preview.prompt}
+                  src={preview.thumbnail_src}
+                  className="h-full w-full object-cover object-top"
+                />
+              ) : null}
+            </View>
+          </Loading>
+          <Text maxLines={2} className="flex-1" size="small">
+            {preview.prompt}
+          </Text>
         </View>
-      </Loading>
-    </Interactive>
+      </TooltipContent>
+    </Tooltip>
   );
 }
 
