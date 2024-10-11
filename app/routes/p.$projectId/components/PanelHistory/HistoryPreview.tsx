@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { Interactive } from "tanukui/components/Interactive.js";
+import { Loading } from "tanukui/components/Loading.js";
 import { Pill, PillProps } from "tanukui/components/Pill.js";
 import { Surface } from "tanukui/components/Surface.js";
 import { View } from "tanukui/components/View.js";
@@ -9,60 +10,64 @@ import { type Preview } from "~/.server/models/ModelPreview";
 import { useProjectStore } from "../../hooks/useProjectStore";
 
 interface HistoryPreviewProps {
-  active?: boolean;
   mini?: boolean;
+  active?: boolean;
   preview: Preview;
 }
 
-export function HistoryPreview({ preview, ...props }: HistoryPreviewProps) {
+export function HistoryPreview({ mini, active, preview }: HistoryPreviewProps) {
   const setSelectedVersion = useProjectStore(
     (store) => store.setSelectedVersion,
   );
 
   const onClick = useCallback(() => {
     setSelectedVersion(preview.version);
-  }, [preview.version]);
+  }, [preview.version, setSelectedVersion]);
 
-  if (props.mini) {
+  if (mini) {
     return (
       <MiniHistoryPreview
-        {...props}
+        {...{ active, preview }}
         preview={preview}
         variant="outline"
         onClick={onClick}
-        color={props.active ? "primary" : "transparent"}
+        color={active ? "primary" : "transparent"}
       />
     );
   }
 
   return (
     <Interactive>
-      <View
-        onClick={onClick}
-        className={cn(
-          "h-24 rounded-default overflow-hidden",
-          props.active && "border-primary-dimmer active:border-primary-default",
-        )}
-      >
-        <img
-          alt={preview.prompt}
-          src={preview.thumbnail_src}
-          className="h-full w-full"
-        />
-        <Surface elevated={!props.mini} className="absolute bottom-1 left-1">
-          <MiniHistoryPreview preview={preview} {...props} />
-        </Surface>
-      </View>
+      <Loading loading={!preview.thumbnail_src}>
+        <View
+          onClick={onClick}
+          className={cn(
+            "h-24 rounded-default overflow-hidden",
+            active && "border-primary-dimmer active:border-primary-default",
+          )}
+        >
+          {preview.thumbnail_src ? (
+            <img
+              alt={preview.prompt}
+              src={preview.thumbnail_src}
+              className="h-full w-full object-cover object-top"
+            />
+          ) : null}
+          <Surface elevated className="absolute bottom-1 left-1 bg-transparent">
+            <MiniHistoryPreview {...{ active, preview }} />
+          </Surface>
+        </View>
+      </Loading>
     </Interactive>
   );
 }
 
 function MiniHistoryPreview({
   active,
-  className,
   preview,
+  className,
   ...props
-}: HistoryPreviewProps & PillProps) {
+}: Omit<HistoryPreviewProps, "mini"> & PillProps) {
   return (
     <Pill
       color={active ? "primary" : "grey"}

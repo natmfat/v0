@@ -18,6 +18,10 @@ export function generateCode(code: string) {
       <script src="https://cdn.tailwindcss.com"></script>
 
       <style>
+        html, body {
+          background-color: #f3f4f6;
+        }
+
         #root {
           margin: 0 auto;
           width: fit-content;

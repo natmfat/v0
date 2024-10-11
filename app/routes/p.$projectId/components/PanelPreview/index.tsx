@@ -1,3 +1,4 @@
+import invariant from "invariant";
 import { useContext, useEffect } from "react";
 import { Button } from "tanukui/components/Button.js";
 import { IconButton } from "tanukui/components/IconButton.js";
@@ -24,8 +25,11 @@ export function PanelPreview() {
   const projectId = useProjectStore((store) => store.projectId);
   const streaming = useProjectStore((store) => store.streaming);
 
-  const setPreviewCode = useProjectStore((store) => store.setPreviewCode);
-  const preview = useProjectStore((store) => store.getSelectedPreview());
+  const updatePreview = useProjectStore((store) => store.updatePreview);
+  const preview = useProjectStore((store) =>
+    findPreview(store.previews, store.selectedVersion),
+  );
+  invariant(preview, "expected preview");
 
   const showCode = useProjectStore((store) => store.showCode);
   const setShowCode = useProjectStore((store) => store.setShowCode);
@@ -36,7 +40,7 @@ export function PanelPreview() {
   const fetcher = useFetchStream({
     api: createRoute(projectId),
     onFinish: (code) => {
-      setPreviewCode(preview.version, code);
+      updatePreview(preview.version, { code });
     },
   });
 

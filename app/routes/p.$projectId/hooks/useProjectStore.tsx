@@ -1,4 +1,3 @@
-import invariant from "invariant";
 import { ReactNode, createContext, useContext, useEffect, useRef } from "react";
 import { create, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
@@ -35,10 +34,8 @@ type Action = {
   setShowCode: (showCode: boolean) => void;
   setLayout: (layout: Layout) => void;
 
-  setPreviewCode: (version: number, code: string) => void;
+  updatePreview: (version: number, data: Partial<Preview>) => void;
   setStreaming: (streaming: boolean) => void;
-
-  getSelectedPreview: () => Preview;
 
   // @todo add preview, set picker enabled, set selected element, setlayout, and so on
 };
@@ -47,7 +44,7 @@ export type ProjectStore = ReturnType<typeof createProjectStore>;
 
 export const createProjectStore = (initialState: Partial<State>) =>
   create<State & Action>()(
-    immer((set, get) => ({
+    immer((set) => ({
       projectId: "",
       previews: [],
       selectedVersion: 0,
@@ -71,23 +68,17 @@ export const createProjectStore = (initialState: Partial<State>) =>
         set((state) => {
           state.layout = layout;
         }),
-      setPreviewCode: (version, code) =>
+      updatePreview: (version, data) =>
         set((state) => {
           const preview = findPreview(state.previews, version);
           if (preview) {
-            preview.code = code;
+            Object.assign(preview, data);
           }
         }),
       setStreaming: (streaming) =>
         set((state) => {
           state.streaming = streaming;
         }),
-
-      getSelectedPreview: () => {
-        const preview = findPreview(get().previews, get().selectedVersion);
-        invariant(preview, "expected preview");
-        return preview;
-      },
     })),
   );
 

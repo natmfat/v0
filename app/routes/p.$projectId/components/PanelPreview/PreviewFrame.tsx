@@ -34,7 +34,7 @@ export function PreviewFrame({
     if (!thumbnail_src || thumbnail_src.length === 0) {
       uploadScreenshot();
     }
-  }, [code]);
+  }, [version, code, thumbnail_src, uploadScreenshot]);
 
   useEffect(() => {
     setWidth(containerRef.current?.offsetWidth || 0);

@@ -1,5 +1,5 @@
-import { useRevalidator } from "@remix-run/react";
 import html2canvas from "html2canvas";
+import invariant from "invariant";
 import { useCallback, useRef } from "react";
 import { Preview } from "~/.server/models/ModelPreview";
 
@@ -14,23 +14,25 @@ export function useScreenshotFrame({ version }: Pick<Preview, "version">) {
   const isLoadingRef = useRef(false);
   const isLoading = () => isLoadingRef.current;
 
-  const revalidator = useRevalidator();
+  const updatePreview = useProjectStore((store) => store.updatePreview);
 
   const uploadScreenshot = useCallback(async () => {
     if (!iframeRef.current || isLoading()) {
       return;
     }
 
-    const screen = iframeRef.current.contentDocument?.body;
-    if (!screen) {
-      return;
-    }
+    const screen = iframeRef.current.contentDocument?.body!;
+    invariant(screen, "expected iframe screen");
 
     isLoadingRef.current = true;
-    const canvas = await html2canvas(screen, { scale: 0.5 });
-    const image = canvas.toDataURL("image/png");
-
-    const response = await fetch(createRoute(projectId), {
+    const canvas = await html2canvas(screen, {
+      useCORS: true,
+      allowTaint: true,
+      logging: true,
+      scale: 0.2,
+    });
+    const image = canvas.toDataURL("image/jpeg", 1.0);
+    await fetch(createRoute(projectId), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -39,11 +41,11 @@ export function useScreenshotFrame({ version }: Pick<Preview, "version">) {
         image,
       }),
     });
+    isLoadingRef.current = false;
+    updatePreview(version, { thumbnail_src: image });
 
-    if (response.ok) {
-      revalidator.revalidate();
-    }
-  }, [revalidator, projectId]);
+    // @todo timeout & just return an error?
+  }, [version, updatePreview, projectId]);
 
   return {
     iframeRef,

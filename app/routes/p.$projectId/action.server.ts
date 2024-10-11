@@ -18,6 +18,7 @@ export const action = new ResourceBuilder()
       params: { projectId: project_id },
       body: { version, image: thumbnail_src },
     }) => {
+      console.log("uploaded", version);
       try {
         await ModelPreview.updateThumbnail({
           project_id,
