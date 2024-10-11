@@ -1,7 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { CodeBlock, solarizedLight } from "react-code-blocks";
 import { Surface } from "tanukui/components/Surface.js";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "tanukui/components/Tabs.js";
 import { Text } from "tanukui/components/Text.js";
 import { View } from "tanukui/components/View.js";
+import { RiReactjsIcon } from "tanukui/icons/RiReactjsIcon.js";
 import { cn } from "tanukui/lib/cn.js";
 
 import { Layout, useProjectStore } from "../../hooks/useProjectStore";
@@ -15,36 +23,67 @@ export function PreviewFrame({ code }: PreviewFrameProps) {
   const layout = useProjectStore((store) => store.layout);
   const ref = useRef<HTMLDivElement>(null);
 
+  const showCode = useProjectStore((store) => store.showCode);
+
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
     setWidth(ref.current?.offsetWidth || 0);
     setHeight(ref.current?.offsetHeight || 0);
-  }, [layout]);
+  }, [layout, showCode]);
 
   return (
-    <View
-      ref={ref}
-      className={cn(
-        "relative h-full w-full border rounded-default overflow-hidden",
-        layoutToWidth(layout),
-      )}
-    >
-      <iframe
-        title="Preview Code"
-        srcDoc={generateCode(code)}
-        className="h-full w-full outline-none"
-        sandbox="allow-scripts allow-same-origin"
-      />
-      <Surface
-        background="highest"
-        className="absolute px-2 py-1 rounded-lg bottom-2 right-2 select-none"
-      >
-        <Text size="small">
-          {width} x {height}
-        </Text>
-      </Surface>
+    <View className="h-full w-full flex-row gap-2">
+      <View className="w-full h-full rounded-default overflow-hidden flex-1 border items-center px-4">
+        <View
+          ref={ref}
+          className={cn(
+            "relative h-full border-l border-r border-red-default",
+            layoutToWidth(layout),
+          )}
+        >
+          <iframe
+            title="Preview Code"
+            srcDoc={generateCode(code)}
+            className="h-full w-full outline-none"
+            sandbox="allow-scripts allow-same-origin"
+          />
+          <Surface
+            background="highest"
+            className="absolute px-2 py-1 rounded-lg bottom-2 right-2 select-none"
+          >
+            <Text size="small">
+              {width} x {height}
+            </Text>
+          </Surface>
+        </View>
+      </View>
+      {showCode ? (
+        <View className="w-full h-full overflow-hidden flex-1">
+          <Tabs
+            className="flex flex-col gap-2 items-stretch h-full"
+            defaultValue="default"
+          >
+            <TabsList className="flex-shrink-0 flex-grow-0">
+              <TabsTrigger value="default">
+                <RiReactjsIcon />
+                <Text>main.jsx</Text>
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="default" className="h-full flex-1">
+              <View className="rounded-default overflow-hidden h-full flex-1 max-w-full font-mono bg-[#fff4e4] [&>span]:h-full">
+                <CodeBlock
+                  text={code}
+                  language="jsx"
+                  showLineNumbers={false}
+                  theme={solarizedLight}
+                />
+              </View>
+            </TabsContent>
+          </Tabs>
+        </View>
+      ) : null}
     </View>
   );
 }

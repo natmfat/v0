@@ -20,6 +20,7 @@ type State = {
 
   previews: Array<Preview>;
   selectedVersion: number;
+  showCode: boolean;
   layout: Layout;
 
   streaming?: boolean;
@@ -30,7 +31,7 @@ type State = {
 
 type Action = {
   setSelectedVersion: (version: number) => void;
-
+  setShowCode: (showCode: boolean) => void;
   setLayout: (layout: Layout) => void;
 
   setPreviewCode: (version: number, code: string) => void;
@@ -52,11 +53,16 @@ export const createProjectStore = (initialState: Partial<State>) =>
       pickerEnabled: false,
       pickerSelectedElement: null,
       loading: true,
+      showCode: false,
       ...initialState,
 
       setSelectedVersion: (version) =>
         set((state) => {
           state.selectedVersion = version;
+        }),
+      setShowCode: (showCode) =>
+        set((state) => {
+          state.showCode = showCode;
         }),
       setLayout: (layout) =>
         set((state) => {

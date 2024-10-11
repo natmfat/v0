@@ -6,6 +6,7 @@ import { Surface } from "tanukui/components/Surface.js";
 import { Text } from "tanukui/components/Text.js";
 import { ToastContext } from "tanukui/components/Toast.js";
 import { View } from "tanukui/components/View.js";
+import { RiCodeIcon } from "tanukui/icons/RiCodeIcon.js";
 import { RiComputerIcon } from "tanukui/icons/RiComputerIcon.js";
 import { RiLayoutIcon } from "tanukui/icons/RiLayoutIcon.js";
 import { RiLoader2Icon } from "tanukui/icons/RiLoader2Icon.js";
@@ -29,6 +30,8 @@ export function PanelPreview() {
     findPreview(store.previews, store.selectedVersion),
   );
 
+  const showCode = useProjectStore((store) => store.showCode);
+  const setShowCode = useProjectStore((store) => store.setShowCode);
   const setLayout = useProjectStore((store) => store.setLayout);
 
   const { addToast } = useContext(ToastContext);
@@ -95,9 +98,23 @@ export function PanelPreview() {
             <RiPaintIcon />
             Theme
           </Button>
-          <Button size={16} color="transparent">
-            <RiLayoutIcon />
-            Canvas
+          <Button
+            size={16}
+            color="transparent"
+            className="w-[85px]"
+            onClick={() => setShowCode(!showCode)}
+          >
+            {showCode ? (
+              <>
+                <RiCodeIcon />
+                Code
+              </>
+            ) : (
+              <>
+                <RiLayoutIcon />
+                Canvas
+              </>
+            )}
           </Button>
         </View>
       </View>
