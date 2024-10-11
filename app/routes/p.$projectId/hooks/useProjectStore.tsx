@@ -9,7 +9,6 @@ export enum Layout {
   DESKTOP = "desktop",
   TABLET = "tablet",
   MOBILE = "mobile",
-  FULL_SCREEN = "fullscreen",
 }
 
 type State = {
@@ -20,7 +19,7 @@ type State = {
 
   previews: Array<Preview>;
   selectedVersion: number;
-  layout: `${Layout}`;
+  layout: Layout;
 
   streaming?: boolean;
 
@@ -30,6 +29,8 @@ type State = {
 
 type Action = {
   setSelectedVersion: (version: number) => void;
+
+  setLayout: (layout: Layout) => void;
 
   setPreviewCode: (version: number, code: string) => void;
   setStreaming: (streaming: boolean) => void;
@@ -54,6 +55,10 @@ export const createProjectStore = (initialState: Partial<State>) =>
       setSelectedVersion: (version) =>
         set((state) => {
           state.selectedVersion = version;
+        }),
+      setLayout: (layout) =>
+        set((state) => {
+          state.layout = layout;
         }),
       setPreviewCode: (version, code) =>
         set((state) => {

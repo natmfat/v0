@@ -12,6 +12,7 @@ import "tanukui/styles/core.css";
 import "tanukui/styles/themes/light.css";
 
 import "./tailwind.css";
+import { ToastProvider } from "tanukui/components/Toast.js";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -22,7 +23,8 @@ export const links: LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;500;600&display=swap",
+    href:
+      "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;500;600&display=swap",
   },
 ];
 
@@ -36,7 +38,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body data-theme="light">
-        <ThemeProvider defaultValue="light">{children}</ThemeProvider>
+        <ToastProvider>
+          <ThemeProvider defaultValue="light">{children}</ThemeProvider>
+        </ToastProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

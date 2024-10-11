@@ -1,24 +1,24 @@
+import invariant from "invariant";
+import { useContext, useEffect } from "react";
 import { Button } from "tanukui/components/Button.js";
 import { IconButton } from "tanukui/components/IconButton.js";
-import { Separator } from "tanukui/components/Separator.js";
 import { Surface } from "tanukui/components/Surface.js";
 import { Text } from "tanukui/components/Text.js";
+import { ToastContext } from "tanukui/components/Toast.js";
 import { View } from "tanukui/components/View.js";
 import { RiComputerIcon } from "tanukui/icons/RiComputerIcon.js";
-import { RiFullscreenIcon } from "tanukui/icons/RiFullscreenIcon.js";
 import { RiLayoutIcon } from "tanukui/icons/RiLayoutIcon.js";
+import { RiLoader2Icon } from "tanukui/icons/RiLoader2Icon.js";
 import { RiPaintIcon } from "tanukui/icons/RiPaintIcon.js";
 import { RiSmartphoneIcon } from "tanukui/icons/RiSmartphoneIcon.js";
 import { RiTabletIcon } from "tanukui/icons/RiTabletIcon.js";
-
-import { useProjectStore } from "../../hooks/useProjectStore";
-import { useEffect } from "react";
-import { useFetchStream } from "../../hooks/useFetchStream";
 import { createRoute } from "~/routes/api.ollama.$projectId";
+
+import { useFetchStream } from "../../hooks/useFetchStream";
+import { Layout, useProjectStore } from "../../hooks/useProjectStore";
+import { copyToClipboard } from "../../lib/copyToClipboard";
 import { findPreview } from "../../lib/projectStoreUtils";
-import invariant from "invariant";
-import { RiLoader2Icon } from "tanukui/icons/RiLoader2Icon.js";
-import { generateCode } from "../../lib/generateCode";
+import { PreviewFrame } from "./PreviewFrame";
 
 export function PanelPreview() {
   const projectId = useProjectStore((store) => store.projectId);
@@ -26,8 +26,12 @@ export function PanelPreview() {
 
   const setPreviewCode = useProjectStore((store) => store.setPreviewCode);
   const preview = useProjectStore((store) =>
-    findPreview(store.previews, store.selectedVersion)
+    findPreview(store.previews, store.selectedVersion),
   );
+
+  const setLayout = useProjectStore((store) => store.setLayout);
+
+  const { addToast } = useContext(ToastContext);
 
   invariant(preview, "expected a preview");
 
@@ -40,7 +44,6 @@ export function PanelPreview() {
 
   // request generation if preview is empty
   useEffect(() => {
-    console.log(preview);
     if (preview.code.length === 0) {
       fetcher.fetch();
     }
@@ -55,24 +58,36 @@ export function PanelPreview() {
         <Surface
           className="px-3 py-1 select-none flex-shrink max-w-full overflow-hidden h-fit rounded-full cursor-pointer"
           elevated
+          onClick={() => {
+            copyToClipboard(preview.prompt);
+            addToast({
+              type: "success",
+              message: "Copied prompt to clipboard.",
+            });
+          }}
         >
           <Text className="w-full flex-1">{preview.prompt}</Text>
         </Surface>
 
         <View className="flex-row gap-2 w-fit">
           <Surface className="p-1 gap-1.5 rounded-default flex-row" elevated>
-            <IconButton alt="Desktop width">
+            <IconButton
+              alt="Desktop width"
+              onClick={() => setLayout(Layout.DESKTOP)}
+            >
               <RiComputerIcon />
             </IconButton>
-            <IconButton alt="Tablet width">
+            <IconButton
+              alt="Tablet width"
+              onClick={() => setLayout(Layout.TABLET)}
+            >
               <RiTabletIcon />
             </IconButton>
-            <IconButton alt="Smartphone width">
+            <IconButton
+              alt="Smartphone width"
+              onClick={() => setLayout(Layout.MOBILE)}
+            >
               <RiSmartphoneIcon />
-            </IconButton>
-            <Separator orientation="vertical" />
-            <IconButton alt="Fullscreen">
-              <RiFullscreenIcon />
             </IconButton>
           </Surface>
 
@@ -87,26 +102,18 @@ export function PanelPreview() {
         </View>
       </View>
 
-      <View className="h-full flex-1 border rounded-default overflow-hidden">
-        {streaming || preview.code.length === 0
-          ? (
-            <View className="h-full w-full grid place-items-center">
-              <View className="gap-1 flex-row items-center">
-                <RiLoader2Icon className="animate-[spin_2s_linear_infinite]" />
-                <Text size="small" color="dimmer">Building your ideas</Text>
-              </View>
-            </View>
-          )
-          : (
-            <iframe
-              title="Preview Code"
-              srcDoc={generateCode(preview.code)}
-              className="border-none outline-none h-full w-full"
-            />
-          )}
+      <View className="h-full flex-1 grid place-items-center">
+        {streaming || preview.code.length === 0 ? (
+          <View className="gap-1 flex-row items-center">
+            <RiLoader2Icon className="animate-[spin_2s_linear_infinite]" />
+            <Text size="small" color="dimmer">
+              Building your ideas
+            </Text>
+          </View>
+        ) : (
+          <PreviewFrame code={preview.code} />
+        )}
       </View>
     </Surface>
   );
 }
-
-// @todo create 3 variants, like v0
