@@ -15,6 +15,7 @@ export const action = new ResourceBuilder()
       }),
     },
     handler: async ({ formData }) => {
+      // create project & v0
       const project = await ModelProject.create(formData);
       await ModelPreview.create({
         project_id: project.id,

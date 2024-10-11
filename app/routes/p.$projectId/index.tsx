@@ -5,7 +5,6 @@ import { View } from "tanukui/components/View.js";
 import { ModelPreview, ModelProject } from "~/.server/models";
 import { notFound, requireTruthy } from "~/lib/utils.server";
 
-import { createRoute } from "../api.ollama.$projectId.v0";
 import Header from "./components/Header";
 import { PanelHistory } from "./components/PanelHistory";
 import { PanelPreview } from "./components/PanelPreview";
@@ -16,6 +15,10 @@ import { ProjectStoreProvider, useProjectStore } from "./hooks/useProjectStore";
 //   role: string;
 //   content: string;
 // };
+
+export function createRoute(projectId: string) {
+  return `/p/${projectId}`;
+}
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const projectId = params.projectId;

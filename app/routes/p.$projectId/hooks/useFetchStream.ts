@@ -1,38 +1,69 @@
+import { useRef, useState } from "react";
+import { useProjectStore } from "./useProjectStore";
+
 type FetchStreamArgs = {
   /* API route to use  */
   api: string;
 
   /* Callback called on each chunk (it's already formatted) */
-  onChunk: (chunk: string) => void;
+  onChunk?: (chunk: string) => void;
 
   /* Callback when all chunks are loaded  */
-  onComplete: (chunks: string[]) => void;
+  onFinish?: (code: string) => void;
+  // on error?
 };
 
-// on error?
+const noop = () => {};
 
-export function useFetchStream({ api, onChunk, onComplete }: FetchStreamArgs) {
+// @todo body is possible to type, just get resource zod validator type
+
+export function useFetchStream(
+  {
+    api,
+    onChunk = noop,
+    onFinish = noop,
+  }: FetchStreamArgs,
+) {
+  // global streaming state
+  const setGlobalStreaming = useProjectStore((store) => store.setStreaming);
+
+  // internal use to prevent streaming more if already called
+  // state changes are queued, but refs are instant
+  const isStreamingRef = useRef(false);
+  const isStreaming = () => isStreamingRef.current;
+
+  const setStreaming = (nextStreaming: boolean) => {
+    isStreamingRef.current = nextStreaming;
+    setGlobalStreaming(nextStreaming);
+  };
+
   return {
-    fetch: async (body: BodyInit) => {
-      const response = await fetch(api, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body,
-      });
-
-      if (!response || !response.ok) {
-        onComplete([]);
+    isStreaming,
+    fetch: async () => {
+      if (isStreaming()) {
         return;
       }
 
-      onComplete(
-        await streamResponse({
-          response,
-          onChunk,
-        }),
-      );
+      setStreaming(true);
+      const response = await fetch(api, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      // response failed, exit
+      if (!response || !response.ok) {
+        onFinish("");
+        setStreaming(false);
+        return;
+      }
+
+      // otherwise read stream
+      const output = (await streamResponse({
+        response,
+        onChunk,
+      })).join("");
+      onFinish(output);
+      setStreaming(false);
     },
   };
 }
@@ -42,7 +73,7 @@ async function streamResponse({
   onChunk,
 }: {
   response: Response;
-  onChunk: FetchStreamArgs["onChunk"];
+  onChunk: NonNullable<FetchStreamArgs["onChunk"]>;
 }): Promise<string[]> {
   if (!response.body) {
     return [];

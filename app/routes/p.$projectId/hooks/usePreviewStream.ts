@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useEventSource } from "remix-utils/sse/react";
 import { Preview } from "~/.server/models/ModelPreview";
-import { createRoute } from "~/routes/api.ollama.$projectId.v0";
+import { createRoute } from "~/routes/api.ollama.$projectId";
 
 import { useProjectStore } from "./useProjectStore";
 

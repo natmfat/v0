@@ -14,16 +14,17 @@ export async function find({ project_id }: Pick<Preview, "project_id">) {
     SELECT * FROM preview_
     WHERE project_id = ${project_id}
   `;
-
   return previews;
 }
 
-export async function findVersion0({
+export async function findLatestVersion({
   project_id,
 }: Pick<Preview, "project_id">) {
   const previews = await sql<Preview[]>`
-    SELECT id FROM preview_
-    WHERE project_id = ${project_id} AND version = 0
+    SELECT * from preview_
+    WHERE project_id = ${project_id}
+    ORDER BY version DESC
+    LIMIT 1
   `;
   return previews.length === 0 ? null : previews[0];
 }
@@ -43,9 +44,13 @@ export async function create({
   return preview[0];
 }
 
-export async function updateCode({ id, code }: Pick<Preview, "id" | "code">) {
+export async function updateCode({
+  project_id,
+  version,
+  code,
+}: Pick<Preview, "project_id" | "version" | "code">) {
   await sql`
-    UPDATE preview_ set code = ${code}
-    WHERE id = ${id}
+    UPDATE preview_ SET code = ${code}
+    WHERE project_id = ${project_id} AND version = ${version}
   `;
 }

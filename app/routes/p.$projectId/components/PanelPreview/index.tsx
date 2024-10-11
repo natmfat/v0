@@ -11,11 +11,40 @@ import { RiPaintIcon } from "tanukui/icons/RiPaintIcon.js";
 import { RiSmartphoneIcon } from "tanukui/icons/RiSmartphoneIcon.js";
 import { RiTabletIcon } from "tanukui/icons/RiTabletIcon.js";
 
-import { usePreviewStream } from "../../hooks/usePreviewStream";
+import { useProjectStore } from "../../hooks/useProjectStore";
+import { useEffect } from "react";
+import { useFetchStream } from "../../hooks/useFetchStream";
+import { createRoute } from "~/routes/api.ollama.$projectId";
+import { findPreview } from "../../lib/projectStoreUtils";
+import invariant from "invariant";
+import { RiLoader2Icon } from "tanukui/icons/RiLoader2Icon.js";
 import { generateCode } from "../../lib/generateCode";
 
 export function PanelPreview() {
-  const preview = usePreviewStream();
+  const projectId = useProjectStore((store) => store.projectId);
+  const streaming = useProjectStore((store) => store.streaming);
+
+  const setPreviewCode = useProjectStore((store) => store.setPreviewCode);
+  const preview = useProjectStore((store) =>
+    findPreview(store.previews, store.selectedVersion)
+  );
+
+  invariant(preview, "expected a preview");
+
+  const fetcher = useFetchStream({
+    api: createRoute(projectId),
+    onFinish: (code) => {
+      setPreviewCode(preview.version, code);
+    },
+  });
+
+  // request generation if preview is empty
+  useEffect(() => {
+    console.log(preview);
+    if (preview.code.length === 0) {
+      fetcher.fetch();
+    }
+  }, [preview]);
 
   return (
     <Surface
@@ -58,16 +87,23 @@ export function PanelPreview() {
         </View>
       </View>
 
-      <View className="h-full flex-1">
-        {preview.loading ? null : (
-          <iframe
-            title="Component Preview"
-            srcDoc={generateCode(preview.code)}
-            className="border border-interactive rounded-default h-full flex-1"
-          />
-        )}
-
-        {preview.code}
+      <View className="h-full flex-1 border rounded-default overflow-hidden">
+        {streaming || preview.code.length === 0
+          ? (
+            <View className="h-full w-full grid place-items-center">
+              <View className="gap-1 flex-row items-center">
+                <RiLoader2Icon className="animate-[spin_2s_linear_infinite]" />
+                <Text size="small" color="dimmer">Building your ideas</Text>
+              </View>
+            </View>
+          )
+          : (
+            <iframe
+              title="Preview Code"
+              srcDoc={generateCode(preview.code)}
+              className="border-none outline-none h-full w-full"
+            />
+          )}
       </View>
     </Surface>
   );
