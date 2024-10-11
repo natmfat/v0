@@ -25,7 +25,7 @@ export function HistoryPreview({ mini, active, preview }: HistoryPreviewProps) {
     setSelectedVersion(preview.version);
   }, [preview.version, setSelectedVersion]);
 
-  useRequestScreenshot({ ...preview });
+  useRequestScreenshot(preview);
 
   if (mini) {
     return (

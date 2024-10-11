@@ -1,5 +1,5 @@
 import invariant from "invariant";
-import { useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { Button } from "tanukui/components/Button.js";
 import { IconButton } from "tanukui/components/IconButton.js";
 import { Surface } from "tanukui/components/Surface.js";
@@ -17,6 +17,7 @@ import { createRoute } from "~/routes/api.ollama.$projectId";
 
 import { useFetchStream } from "../../hooks/useFetchStream";
 import { Layout, useProjectStore } from "../../hooks/useProjectStore";
+import { useRequestStream } from "../../hooks/useRequestStream";
 import { copyToClipboard } from "../../lib/copyToClipboard";
 import { findPreview } from "../../lib/projectStoreUtils";
 import { PreviewFrame } from "./PreviewFrame";
@@ -37,19 +38,14 @@ export function PanelPreview() {
 
   const { addToast } = useContext(ToastContext);
 
-  const fetcher = useFetchStream({
-    api: createRoute(projectId),
-    onFinish: (code) => {
+  const onComplete = useCallback(
+    (code: string) => {
       updatePreview(preview.version, { code });
     },
-  });
+    [updatePreview],
+  );
 
-  // request generation if preview is empty
-  useEffect(() => {
-    if (preview.code.length === 0) {
-      fetcher.fetch();
-    }
-  }, [fetcher, preview]);
+  useRequestStream(preview);
 
   return (
     <Surface
@@ -119,7 +115,7 @@ export function PanelPreview() {
       </View>
 
       <View className="h-full flex-1 grid place-items-center">
-        {streaming || preview.code.length === 0 ? (
+        {streaming ? (
           <View className="gap-1 flex-row items-center">
             <RiLoader2Icon className="animate-[spin_2s_linear_infinite]" />
             <Text size="small" color="dimmer">

@@ -50,7 +50,7 @@ export async function findAllWithPreview() {
   >`
     SELECT project_.id AS project_id, project_.prompt AS prompt, preview_.version, preview_.thumbnail_src FROM project_
     LEFT JOIN preview_ ON project_.id = preview_.project_id
-    WHERE preview_.version = 0    ;
+    WHERE preview_.version = 0 AND project_.public = true;
   `;
   return projects;
 }

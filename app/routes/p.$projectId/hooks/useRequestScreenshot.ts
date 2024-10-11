@@ -41,7 +41,7 @@ export function useRequestScreenshot({
     if ((!thumbnail_src || thumbnail_src.length === 0) && code.length > 0) {
       requestScreenshot();
     }
-  }, [thumbnail_src, code]);
+  }, [thumbnail_src, code, requestScreenshot]);
 
   return {
     isLoading,

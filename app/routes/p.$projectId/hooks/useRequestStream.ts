@@ -1,35 +1,26 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Preview } from "~/.server/models/ModelPreview";
+import { createRoute } from "~/routes/api.ollama.$projectId";
 import { processLines } from "~/routes/api.ollama.$projectId/lib/processLines";
 
 import { useProjectStore } from "./useProjectStore";
 
-type FetchStreamArgs = {
-  /* API route to use  */
-  api: string;
-
-  /* Callback called on each chunk (it's already formatted) */
-  onChunk?: (chunk: string) => void;
-
-  /* Callback when all chunks are loaded  */
-  onComplete?: (code: string) => void;
-  // on error?
-};
-
-const noop = () => {};
-
 // @todo body is possible to type, just get resource zod validator type
 
-export function useFetchStream({
-  api,
-  onChunk = noop,
-  onComplete = noop,
-}: FetchStreamArgs) {
+export function useRequestStream({
+  version,
+  code,
+}: Pick<Preview, "version" | "code">) {
+  const projectId = useProjectStore((store) => store.projectId);
+  const updatePreview = useProjectStore((store) => store.updatePreview);
   const setGlobalStreaming = useProjectStore((store) => store.setStreaming);
 
   // internal use to prevent streaming more if already called
   // state changes are queued, but refs are instant
   const isStreamingRef = useRef(false);
   const isStreaming = () => isStreamingRef.current;
+
+  const stop = useRef(false);
 
   const setStreaming = useCallback(
     (nextStreaming: boolean) => {
@@ -39,35 +30,49 @@ export function useFetchStream({
     [setGlobalStreaming],
   );
 
-  const fetchStream = useCallback(async () => {
-    if (isStreaming()) {
+  const requestStream = useCallback(async () => {
+    if (isStreaming() || stop.current) {
       return;
     }
 
     setStreaming(true);
-    const response = await fetch(api);
+    const response = await fetch(createRoute(projectId));
+
+    if (!response.ok) {
+      stop.current = true;
+      setStreaming(false);
+      return;
+    }
+
     const output = (
       await streamResponse({
         response,
-        onChunk,
       })
     ).join("");
-    onComplete(processLines(output));
+    updatePreview(version, { code: processLines(output) });
     setStreaming(false);
-  }, [api, onChunk, onComplete, setStreaming]);
+  }, [projectId, version, updatePreview]);
+
+  useEffect(() => {
+    stop.current = false;
+  }, [version]);
+
+  useEffect(() => {
+    if (!code || code.length === 0) {
+      requestStream();
+    }
+  }, [code, requestStream]);
 
   return {
     isStreaming,
-    fetch: fetchStream,
+    fetch: requestStream,
   };
 }
 
 async function streamResponse({
   response,
-  onChunk,
 }: {
   response: Response;
-  onChunk: NonNullable<FetchStreamArgs["onChunk"]>;
 }): Promise<string[]> {
   if (!response.ok || !response.body) {
     return [];
@@ -93,7 +98,6 @@ async function streamResponse({
               .trimEnd()
               .replaceAll(/\\n/g, "\n")
               .replaceAll(/\\"/g, `"`);
-            onChunk(chunk);
             chunks.push(chunk);
           }
         }
