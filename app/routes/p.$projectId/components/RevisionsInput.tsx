@@ -41,14 +41,7 @@ export function RevisionsInput() {
         size={spaceTokens.space32}
       />
       <Separator orientation="vertical" className="h-8" />
-      <Form
-        method="POST"
-        className="w-full"
-        ref={formRef}
-        onSubmit={(e) => {
-          (e.target as HTMLFormElement).reset();
-        }}
-      >
+      <Form method="POST" className="w-full" ref={formRef}>
         <input
           name="prompt"
           value={value}
@@ -73,48 +66,3 @@ export function RevisionsInput() {
     </Surface>
   );
 }
-
-// <form
-//   onSubmit={async (e) => {
-//     e.preventDefault();
-//     return;
-//     const nextMessages = [...messages, { role: "user", content: value }];
-//     setMessages(nextMessages);
-//     const response = await fetch(ROUTE, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         messages: nextMessages,
-//         intent: Intent.GENERATE,
-//       }),
-//     });
-// if (!response || !response.ok) {
-//   return;
-// }
-
-// const output = await streamResponse({
-//   response,
-//   onChunk: (chunk) => {
-//     setAnswer((prevAnswer) => [...prevAnswer, chunk]);
-//   },
-// });
-
-// setMessages((prevMessages) => [
-//   ...prevMessages,
-//   { role: "assistant", content: output.join("") },
-// ]);
-//     setAnswer([]);
-//   }}
-// >
-//   <View>
-//     {[...messages, { role: "assistant", content: answer }].map(
-//       (message, i) => (
-//         <pre key={i}>{message.content}</pre>
-//       ),
-//     )}
-//   </View>
-
-//   <EditInput />
-// </form>

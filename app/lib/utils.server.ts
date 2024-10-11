@@ -64,7 +64,7 @@ export function requireTruthy(
 export async function standard(
   success: boolean,
   message?: string,
-  data?: object,
+  data?: Record<string, unknown>,
 ) {
   const fMessage = formatMessage(
     message || (success ? "this operation succeeded" : "this operation failed"),
@@ -74,7 +74,7 @@ export async function standard(
     JSON.stringify({
       success,
       message: fMessage,
-      data,
+      data: data || {},
     } satisfies StandardResponse),
     {
       status: success ? 200 : 500,

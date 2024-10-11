@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { Avatar } from "tanukui/components/Avatar.js";
 import { Button } from "tanukui/components/Button.js";
 import { Pill } from "tanukui/components/Pill.js";
@@ -6,6 +7,7 @@ import { Text } from "tanukui/components/Text.js";
 import { View } from "tanukui/components/View.js";
 import { RiLockUnlockIcon } from "tanukui/icons/RiLockUnlockIcon.js";
 import { spaceTokens } from "tanukui/lib/tokens.js";
+import { ROUTE } from "~/routes/_index";
 
 import { useProjectStore } from "../hooks/useProjectStore";
 
@@ -31,8 +33,8 @@ export default function Header() {
         </Pill>
       </View>
       <View className="flex-row gap-2">
-        <Button size={16} color="transparent">
-          New Generation
+        <Button size={16} color="transparent" asChild>
+          <Link to={ROUTE}>New Generation</Link>
         </Button>
         <Button size={16} color="transparent" variant="outline">
           Feedback

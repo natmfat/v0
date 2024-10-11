@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import { processLines } from "~/routes/api.ollama.$projectId/lib/processLines";
+
 import { useProjectStore } from "./useProjectStore";
 
 type FetchStreamArgs = {
@@ -17,13 +19,11 @@ const noop = () => {};
 
 // @todo body is possible to type, just get resource zod validator type
 
-export function useFetchStream(
-  {
-    api,
-    onChunk = noop,
-    onFinish = noop,
-  }: FetchStreamArgs,
-) {
+export function useFetchStream({
+  api,
+  onChunk = noop,
+  onFinish = noop,
+}: FetchStreamArgs) {
   // global streaming state
   const setGlobalStreaming = useProjectStore((store) => store.setStreaming);
 
@@ -58,11 +58,13 @@ export function useFetchStream(
       }
 
       // otherwise read stream
-      const output = (await streamResponse({
-        response,
-        onChunk,
-      })).join("");
-      onFinish(output);
+      const output = (
+        await streamResponse({
+          response,
+          onChunk,
+        })
+      ).join("");
+      onFinish(processLines(output));
       setStreaming(false);
     },
   };

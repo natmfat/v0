@@ -1,11 +1,13 @@
+import { streamText } from "ai";
+import { ollama } from "ollama-ai-provider";
 import { z } from "zod";
 import { ModelPreview } from "~/.server/models";
 import { ResourceBuilder } from "~/lib/ResourceBuilder";
-import { notFound, requireTruthy } from "~/lib/utils.server";
+import { notFound, requireTruthy, standard } from "~/lib/utils.server";
 
-import { streamResponse } from "./lib/streamResponse";
-import systemPromptAdjust from "./lib/systemPromptAdjust.txt?raw";
-import systemPromptDefault from "./lib/systemPromptDefault.txt?raw";
+import { processLines } from "./lib/processLines";
+import systemPromptAdjust from "./lib/prompt/systemAdjust.txt?raw";
+import systemPromptDefault from "./lib/prompt/systemDefault.txt?raw";
 
 export const loader = new ResourceBuilder()
   .register({
@@ -24,19 +26,69 @@ export const loader = new ResourceBuilder()
         });
       };
 
-      if (preview.code.length === 0) {
+      if (preview.code.length !== 0) {
+        // this shouldn't be possible btw
+        return standard(
+          false,
+          "you've already created a code preview for the latest version!",
+        );
+      }
+
+      // if code is empty and this is v0
+      // we should use the default system prompt
+      if (preview.version === 0) {
         return streamResponse({
           systemPrompt: systemPromptDefault,
-          userPrompt: preview.prompt,
+          userPrompt: `User: ${preview.prompt}`,
           onFinish,
         });
       }
 
+      // get all previous prompts & code (remove last, that's the current prompt)
+      // @todo could be more efficient
+      const previews = await ModelPreview.findLimited({ project_id });
+      previews.pop();
+
+      const prevPrompts = previews.map(
+        (preview, i) => `${i + 1}. ${preview.prompt}`,
+      );
+
       return streamResponse({
         systemPrompt: systemPromptAdjust,
-        userPrompt: `${preview.prompt}\nExisting code:${preview.code}`,
+        userPrompt: `Past user requests:
+${prevPrompts.join("\n")}
+Current user request: ${preview.prompt}
+Current code:
+${previews[previews.length - 1].code}`,
         onFinish,
       });
     },
   })
   .create();
+
+type StreamResponseArgs = {
+  userPrompt: string;
+  systemPrompt: string;
+  onFinish: (text: string) => void;
+};
+
+/**
+ * Generate text & stream to client
+ * @returns A response
+ */
+export async function streamResponse({
+  userPrompt,
+  systemPrompt,
+  onFinish,
+}: StreamResponseArgs) {
+  return (
+    await streamText({
+      model: ollama("qwen2.5-coder:1.5b"),
+      system: systemPrompt,
+      prompt: userPrompt,
+      onFinish: ({ text }) => {
+        onFinish(processLines(text));
+      },
+    })
+  ).toDataStreamResponse();
+}

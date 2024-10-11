@@ -13,7 +13,17 @@ export async function find({ project_id }: Pick<Preview, "project_id">) {
   const previews = await sql<Preview[]>`
     SELECT * FROM preview_
     WHERE project_id = ${project_id}
+    ORDER BY version
   `;
+  return previews;
+}
+
+export async function findLimited({ project_id }: Pick<Preview, "project_id">) {
+  const previews = await sql<Pick<Preview, "prompt" | "code">[]>`
+    SELECT prompt, code FROM preview_
+    WHERE project_id = ${project_id}
+  `;
+
   return previews;
 }
 

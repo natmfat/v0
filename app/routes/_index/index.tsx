@@ -20,6 +20,8 @@ import { getRandomSuggestion, suggestions } from "./lib/suggestions";
 
 export { action } from "./action.server";
 
+export const ROUTE = "/";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "v0" },
@@ -57,6 +59,7 @@ export default function Index() {
         >
           <Form method="POST">
             <MultilineInput
+              required
               placeholder={stableSuggestion}
               className="w-full min-h-20 resize-none"
               name="prompt"
