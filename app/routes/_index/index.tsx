@@ -1,9 +1,11 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
+import { Anchor } from "tanukui/components/Anchor.js";
 import { Button } from "tanukui/components/Button.js";
 import { Heading } from "tanukui/components/Heading.js";
 import { IconButton } from "tanukui/components/IconButton.js";
+import { Interactive } from "tanukui/components/Interactive.js";
 import { MultilineInput } from "tanukui/components/MultilineInput.js";
 import { Pill } from "tanukui/components/Pill.js";
 import { Surface } from "tanukui/components/Surface.js";
@@ -13,8 +15,9 @@ import { RiArrowRightIcon } from "tanukui/icons/RiArrowRightIcon.js";
 import { RiArrowRightUpIcon } from "tanukui/icons/RiArrowRightUpIcon.js";
 import { RiImageIcon } from "tanukui/icons/RiImageIcon.js";
 import { RiLockUnlockIcon } from "tanukui/icons/RiLockUnlockIcon.js";
-import { ModelPalette } from "~/.server/models";
+import { ModelPalette, ModelProject } from "~/.server/models";
 
+import { createRoute } from "../p.$projectId";
 import { SelectPalette } from "./components/SelectPalette";
 import { getRandomSuggestion, suggestions } from "./lib/suggestions";
 
@@ -37,15 +40,17 @@ export async function loader() {
   return {
     stableSuggestion: getRandomSuggestion(Math.random()),
     palettes: await ModelPalette.findAll(),
+    projects: await ModelProject.findAllWithPreview(),
   };
 }
 
 export default function Index() {
-  const { stableSuggestion, palettes } = useLoaderData<typeof loader>();
+  const { stableSuggestion, palettes, projects } =
+    useLoaderData<typeof loader>();
   const [value, setValue] = useState("");
 
   return (
-    <View className="max-w-3xl w-full mx-auto px-6 h-full text-center items-center">
+    <View className="max-w-4xl w-full mx-auto px-6 h-full text-center items-center">
       <View className="max-w-lg w-full mx-auto">
         <Heading level={1} className="mt-28">
           Generate. Refine. Ship.
@@ -111,6 +116,23 @@ export default function Index() {
           </Pill>
         ))}
       </View>
+      <View className="mt-28 grid grid-cols-3 gap-4 w-full">
+        {projects.map((project) => (
+          <Link key={project.project_id} to={createRoute(project.project_id)}>
+            <View className="gap-2">
+              <Interactive>
+                <img src={project.thumbnail_src} alt={project.prompt} />
+              </Interactive>
+              <Text maxLines={2}>{project.prompt}</Text>
+            </View>
+          </Link>
+        ))}
+      </View>
+      <footer className="h-28 grid place-items-center">
+        <Anchor href="https://natmfat.com" target="_blank" rel="noreferrer">
+          natmfat.com
+        </Anchor>
+      </footer>
     </View>
   );
 }

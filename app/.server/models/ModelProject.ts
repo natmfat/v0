@@ -1,6 +1,7 @@
 import { sql } from "~/.server/database";
 
 import { Palette } from "./ModelPalette";
+import { Preview } from "./ModelPreview";
 
 export type Project = {
   id: string;
@@ -36,6 +37,22 @@ export async function find({ id }: Pick<Project, "id">) {
     return null;
   }
   return project[0];
+}
+
+export async function findAllWithPreview() {
+  const projects = await sql<
+    Array<{
+      project_id: Project["id"];
+      prompt: Project["prompt"];
+      version: Preview["version"];
+      thumbnail_src: Preview["thumbnail_src"];
+    }>
+  >`
+    SELECT project_.id AS project_id, project_.prompt AS prompt, preview_.version, preview_.thumbnail_src FROM project_
+    LEFT JOIN preview_ ON project_.id = preview_.project_id
+    WHERE preview_.version = 0    ;
+  `;
+  return projects;
 }
 
 export async function create({
