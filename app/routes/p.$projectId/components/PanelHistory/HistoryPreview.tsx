@@ -33,49 +33,47 @@ export function HistoryPreview({ mini, active, preview }: HistoryPreviewProps) {
 
   useRequestScreenshot(preview);
 
-  if (mini) {
-    return (
-      <MiniHistoryPreview
-        {...{ active, preview }}
-        preview={preview}
-        variant="outline"
-        onClick={onClick}
-        color={active ? "primary" : "transparent"}
-      />
-    );
-  }
-
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Interactive>
-          <View
-            className={cn(
-              "relative overflow-hidden rounded-default",
-              active && "border-primary-dimmer active:border-primary-default",
-            )}
+      <TooltipTrigger>
+        {mini ? (
+          <MiniHistoryPreview
+            {...{ active, preview }}
+            preview={preview}
+            variant="outline"
             onClick={onClick}
-          >
-            <Loading loading={!preview.thumbnail_src}>
-              <View className="h-24">
-                {preview.thumbnail_src ? (
-                  <img
-                    alt={preview.prompt}
-                    src={preview.thumbnail_src}
-                    className="h-full w-full object-cover object-top"
-                  />
-                ) : null}
-              </View>
-            </Loading>
-
-            <Surface
-              elevated
-              className="absolute bottom-1 left-1 bg-transparent"
+            color={active ? "primary" : "transparent"}
+          />
+        ) : (
+          <Interactive>
+            <View
+              className={cn(
+                "relative overflow-hidden rounded-default",
+                active && "border-primary-dimmer active:border-primary-default",
+              )}
+              onClick={onClick}
             >
-              <MiniHistoryPreview {...{ active, preview }} />
-            </Surface>
-          </View>
-        </Interactive>
+              <Loading loading={!preview.thumbnail_src}>
+                <View className="h-24">
+                  {preview.thumbnail_src ? (
+                    <img
+                      alt={preview.prompt}
+                      src={preview.thumbnail_src}
+                      className="h-full w-full object-cover object-top"
+                    />
+                  ) : null}
+                </View>
+              </Loading>
+
+              <Surface
+                elevated
+                className="absolute bottom-1 left-1 bg-transparent"
+              >
+                <MiniHistoryPreview {...{ active, preview }} />
+              </Surface>
+            </View>
+          </Interactive>
+        )}
       </TooltipTrigger>
       <TooltipContent side="right">
         <View className="gap-1 max-w-44">
