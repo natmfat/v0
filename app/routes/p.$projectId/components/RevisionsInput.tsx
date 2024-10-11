@@ -25,7 +25,7 @@ export function RevisionsInput() {
 
   const { formRef } = useRemixForm({
     onSuccess: ({ data }) => {
-      formRef.current?.reset();
+      setValue("");
       if (data && "version" in data && typeof data.version === "number") {
         setSelectedVersion(data.version);
       }
@@ -48,6 +48,7 @@ export function RevisionsInput() {
           name="prompt"
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          autoComplete="off"
           className="h-full w-full flex-1 bg-transparent outline-none border-none placeholder:text-foreground-dimmest text-foreground-default"
           placeholder="Make the heading larger and darker"
         />

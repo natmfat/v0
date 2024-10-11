@@ -24,13 +24,17 @@ export const loader = new ResourceBuilder()
       context: { request },
     }) => {
       // @todo validate project id & version (and don't launch puppeteer if we already created one)
-      // launch puppeteer & screenshot
+
       const browser = await puppeteer.launch({
         headless: true,
         args: minimal_args,
       });
       const page = await browser.newPage();
-      await page.setViewport({ width: 1280, height: 720 });
+      await page.setViewport({
+        width: 1280,
+        height: 720,
+        deviceScaleFactor: 0.25,
+      });
       await page.goto(
         new URL(
           createPreviewRoute(project_id, version),
@@ -44,13 +48,16 @@ export const loader = new ResourceBuilder()
       await browser.close();
 
       // save screenshot
-      ModelPreview.updateThumbnail({
+      const thumbnail_src = `data:image/png;base64,${data}`;
+      await ModelPreview.updateThumbnail({
         project_id,
         version,
-        thumbnail_src: `data:image/png;base64,${data}`,
+        thumbnail_src,
       });
 
-      return standard(true, "created screenshot");
+      return standard(true, "created screenshot", {
+        thumbnail_src,
+      });
     },
   })
   .create();

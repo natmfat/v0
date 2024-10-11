@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef } from "react";
 import { Preview } from "~/.server/models/ModelPreview";
 import { StandardResponse } from "~/lib/utils.server";
+import { createRoute } from "~/routes/api.screenshot.$projectId.$version";
 
-import { createRoute } from "..";
-import { ActionIntent } from "../types";
 import { useProjectStore } from "./useProjectStore";
 
 export function useRequestScreenshot({
+  code,
   version,
   thumbnail_src,
-}: Pick<Preview, "version" | "thumbnail_src">) {
+}: Pick<Preview, "version" | "thumbnail_src" | "code">) {
   const projectId = useProjectStore((store) => store.projectId);
 
   const isLoadingRef = useRef(false);
@@ -17,26 +17,17 @@ export function useRequestScreenshot({
 
   const updatePreview = useProjectStore((store) => store.updatePreview);
 
-  // const { iframeRef, uploadScreenshot } = useScreenshotFrame({ version });
-
   const requestScreenshot = useCallback(async () => {
-    if (!isLoading()) {
+    if (isLoading()) {
       return;
     }
 
     isLoadingRef.current = true;
-    const response = await fetch(createRoute(projectId), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        intent: ActionIntent.UPDATE_THUMBNAIL,
-        version,
-      }),
-    });
-    isLoadingRef.current = false;
+    const response = await fetch(createRoute(projectId, version));
     const { success, data } = (await response.json()) as StandardResponse<{
       thumbnail_src: string;
     }>;
+    isLoadingRef.current = false;
     if (success && data?.thumbnail_src) {
       updatePreview(version, { thumbnail_src: data.thumbnail_src });
     }
@@ -47,10 +38,10 @@ export function useRequestScreenshot({
   useEffect(() => {
     // technically thumbnail must exist (db schema, but I should probably change this - same with code)
     // @todo better to have null than constantly doing length checks
-    if (!thumbnail_src || thumbnail_src.length === 0) {
+    if ((!thumbnail_src || thumbnail_src.length === 0) && code.length > 0) {
       requestScreenshot();
     }
-  }, [thumbnail_src]);
+  }, [thumbnail_src, code]);
 
   return {
     isLoading,

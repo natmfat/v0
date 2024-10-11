@@ -9,31 +9,6 @@ import { ActionIntent } from "./types";
 export const action = new ResourceBuilder()
   .register({
     method: "POST",
-    intent: ActionIntent.UPDATE_THUMBNAIL,
-    validate: {
-      params: z.object({ projectId: z.string() }),
-      body: z.object({ version: z.number(), image: z.string() }),
-    },
-    handler: async ({
-      params: { projectId: project_id },
-      body: { version, image: thumbnail_src },
-    }) => {
-      console.log("uploaded", version);
-      try {
-        await ModelPreview.updateThumbnail({
-          project_id,
-          version,
-          thumbnail_src,
-        });
-      } catch (error) {
-        return standard(false, "failed update preview thumbnail");
-      }
-
-      return standard(true, "updated image preview");
-    },
-  })
-  .register({
-    method: "POST",
     intent: ActionIntent.NEW_VERSION,
     validate: {
       params: z.object({ projectId: z.string() }),
