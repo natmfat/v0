@@ -12,19 +12,23 @@ import systemPromptDefault from "./lib/prompt/systemDefault.txt?raw";
 export const loader = new ResourceBuilder()
   .register({
     method: "GET",
-    validate: { params: z.object({ projectId: z.string() }) },
-    handler: async ({ params: { projectId: project_id } }) => {
-      requireTruthy(project_id, notFound());
-      const preview = await ModelPreview.findLatestVersion({ project_id });
+    validate: {
+      params: z.object({
+        projectId: z.string(),
+        version: z.number({ coerce: true }),
+      }),
+    },
+    handler: async ({ params: { projectId: project_id, version } }) => {
+      const preview = await ModelPreview.findByVersion({ project_id, version });
       requireTruthy(preview, notFound());
 
-      const onFinish = (code: string) => {
+      function onFinish(code: string) {
         ModelPreview.updateCode({
           project_id,
-          version: preview.version,
+          version,
           code,
         });
-      };
+      }
 
       if (preview.code.length !== 0) {
         // this shouldn't be possible btw
@@ -36,7 +40,7 @@ export const loader = new ResourceBuilder()
 
       // if code is empty and this is v0
       // we should use the default system prompt
-      if (preview.version === 0) {
+      if (version === 0) {
         return streamResponse({
           systemPrompt: systemPromptDefault,
           userPrompt: `User: ${preview.prompt}`,

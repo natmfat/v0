@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Preview } from "~/.server/models/ModelPreview";
-import { createRoute } from "~/routes/api.ollama.$projectId";
-import { processLines } from "~/routes/api.ollama.$projectId/lib/processLines";
+import { createRoute } from "~/routes/api.ollama.$projectId.$version";
+import { processLines } from "~/routes/api.ollama.$projectId.$version/lib/processLines";
 
 import { useProjectStore } from "./useProjectStore";
 
@@ -19,6 +19,7 @@ export function useRequestStream({
   // state changes are queued, but refs are instant
   const isStreamingRef = useRef(false);
   const isStreaming = () => isStreamingRef.current;
+  const noCode = () => !code || code.length === 0;
 
   const stop = useRef(false);
 
@@ -36,7 +37,7 @@ export function useRequestStream({
     }
 
     setStreaming(true);
-    const response = await fetch(createRoute(projectId));
+    const response = await fetch(createRoute(projectId, version));
 
     if (!response.ok) {
       stop.current = true;
@@ -49,19 +50,21 @@ export function useRequestStream({
         response,
       })
     ).join("");
-    updatePreview(version, { code: processLines(output) });
+    if (noCode()) {
+      updatePreview(version, { code: processLines(output) });
+    }
     setStreaming(false);
-  }, [projectId, version, updatePreview]);
+  }, [projectId, version, updatePreview, noCode, setStreaming]);
 
   useEffect(() => {
     stop.current = false;
   }, [version]);
 
   useEffect(() => {
-    if (!code || code.length === 0) {
+    if (noCode()) {
       requestStream();
     }
-  }, [code, requestStream]);
+  }, [code, version, noCode, requestStream]);
 
   return {
     isStreaming,

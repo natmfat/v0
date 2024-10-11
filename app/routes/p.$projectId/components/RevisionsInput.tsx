@@ -1,5 +1,4 @@
 import { Form } from "@remix-run/react";
-import { useState } from "react";
 import { Avatar } from "tanukui/components/Avatar.js";
 import { IconButton } from "tanukui/components/IconButton.js";
 import { Separator } from "tanukui/components/Separator.js";
@@ -18,7 +17,6 @@ import { useRemixForm } from "../hooks/useRemixForm";
 import { ActionIntent } from "../types";
 
 export function RevisionsInput() {
-  const [value, setValue] = useState("");
   const setSelectedVersion = useProjectStore(
     (store) => store.setSelectedVersion,
   );
