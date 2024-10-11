@@ -9,15 +9,10 @@ import { cn } from "tanukui/lib/cn.js";
 import { type Preview } from "~/.server/models/ModelPreview";
 
 import { Layout, useProjectStore } from "../../hooks/useProjectStore";
-import { useScreenshotFrame } from "../../hooks/useScreenshotFrame";
 import { FAKE_HTML, generateCode } from "../../lib/generateCode";
 import { TabsContentCode } from "./TabsContentCode";
 
-export function PreviewFrame({
-  version,
-  thumbnail_src,
-  code,
-}: Pick<Preview, "version" | "thumbnail_src" | "code">) {
+export function PreviewFrame({ code }: Pick<Preview, "code">) {
   const layout = useProjectStore((store) => store.layout);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -25,16 +20,6 @@ export function PreviewFrame({
 
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
-
-  const { iframeRef, uploadScreenshot } = useScreenshotFrame({ version });
-
-  useEffect(() => {
-    // technically thumbnail must exist (db schema, but I should probably change this - same with code)
-    // @todo better to have null than constantly doing length checks
-    if (!thumbnail_src || thumbnail_src.length === 0) {
-      uploadScreenshot();
-    }
-  }, [version, code, thumbnail_src, uploadScreenshot]);
 
   useEffect(() => {
     setWidth(containerRef.current?.offsetWidth || 0);
@@ -49,7 +34,6 @@ export function PreviewFrame({
           className={cn("h-full flex-row relative", layoutToWidth(layout))}
         >
           <iframe
-            ref={iframeRef}
             title="Preview Code"
             srcDoc={generateCode(code)}
             className="h-full w-full outline-none border-x"

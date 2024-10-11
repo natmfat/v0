@@ -8,6 +8,7 @@ import { cn } from "tanukui/lib/cn.js";
 import { type Preview } from "~/.server/models/ModelPreview";
 
 import { useProjectStore } from "../../hooks/useProjectStore";
+import { useRequestScreenshot } from "../../hooks/useRequestScreenshot";
 
 interface HistoryPreviewProps {
   mini?: boolean;
@@ -23,6 +24,8 @@ export function HistoryPreview({ mini, active, preview }: HistoryPreviewProps) {
   const onClick = useCallback(() => {
     setSelectedVersion(preview.version);
   }, [preview.version, setSelectedVersion]);
+
+  useRequestScreenshot({ ...preview });
 
   if (mini) {
     return (

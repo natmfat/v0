@@ -86,10 +86,12 @@ export async function standard(
   );
 }
 
-export type StandardResponse = {
+export type StandardResponse<
+  T extends Record<string, unknown> = Record<string, unknown>,
+> = {
   success: boolean;
   message: string;
-  data?: Record<string, unknown>;
+  data?: T;
 };
 
 export function logStandardError(error: unknown, message: string) {
