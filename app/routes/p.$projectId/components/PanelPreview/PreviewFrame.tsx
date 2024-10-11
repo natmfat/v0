@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CodeBlock, solarizedLight } from "react-code-blocks";
+import { Button } from "tanukui/components/Button.js";
 import { Surface } from "tanukui/components/Surface.js";
 import {
   Tabs,
@@ -8,11 +9,14 @@ import {
   TabsTrigger,
 } from "tanukui/components/Tabs.js";
 import { Text } from "tanukui/components/Text.js";
+import { ToastContext } from "tanukui/components/Toast.js";
 import { View } from "tanukui/components/View.js";
+import { RiClipboardIcon } from "tanukui/icons/RiClipboardIcon.js";
 import { RiReactjsIcon } from "tanukui/icons/RiReactjsIcon.js";
 import { cn } from "tanukui/lib/cn.js";
 
 import { Layout, useProjectStore } from "../../hooks/useProjectStore";
+import { copyToClipboard } from "../../lib/copyToClipboard";
 
 interface PreviewFrameProps {
   /** AI generated React component */
@@ -24,6 +28,8 @@ export function PreviewFrame({ code }: PreviewFrameProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   const showCode = useProjectStore((store) => store.showCode);
+
+  const { addToast } = useContext(ToastContext);
 
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
@@ -72,7 +78,22 @@ export function PreviewFrame({ code }: PreviewFrameProps) {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="default" className="h-full flex-1">
-              <View className="rounded-default overflow-hidden h-full flex-1 max-w-full font-mono bg-[#fff4e4] [&>span]:h-full">
+              <View className="rounded-default overflow-hidden h-full flex-1 max-w-full font-mono bg-[#fff4e4] [&>span]:h-full relative border">
+                <Button
+                  size={12}
+                  className="absolute top-2 right-2"
+                  color="transparent"
+                  onClick={() => {
+                    addToast({
+                      type: "success",
+                      message: "Copied code to clipboard.",
+                    });
+                    copyToClipboard(code);
+                  }}
+                >
+                  <RiClipboardIcon />
+                  Copy
+                </Button>
                 <CodeBlock
                   text={code}
                   language="jsx"
