@@ -19,7 +19,7 @@ import { cn } from "tanukui/lib/cn.js";
 
 import { Layout, useProjectStore } from "../../hooks/useProjectStore";
 import { copyToClipboard } from "../../lib/copyToClipboard";
-import { generateCode } from "../../lib/generateCode";
+import { FAKE_HTML, generateCode } from "../../lib/generateCode";
 import { TabsContentCode } from "./TabsContentCode";
 
 interface PreviewFrameProps {
@@ -81,6 +81,7 @@ export function PreviewFrame({ code }: PreviewFrameProps) {
                 <Text>index.html</Text>
               </TabsTrigger>
             </TabsList>
+            <TabsContentCode value="html" language="html" code={FAKE_HTML} />
             <TabsContentCode value="entry" code={code} />
           </Tabs>
         </View>
