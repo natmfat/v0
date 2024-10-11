@@ -1,3 +1,4 @@
+import { Form, useRevalidator } from "@remix-run/react";
 import { useState } from "react";
 import { Avatar } from "tanukui/components/Avatar.js";
 import { IconButton } from "tanukui/components/IconButton.js";
@@ -11,11 +12,24 @@ import {
 import { RiCursorIcon } from "tanukui/icons/RiCursorIcon.js";
 import { spaceTokens } from "tanukui/lib/tokens.js";
 
+import { useProjectStore } from "../hooks/useProjectStore";
+import { useRemixForm } from "../hooks/useRemixForm";
+
 export function RevisionsInput() {
   const [value, setValue] = useState("");
+  const setSelectedVersion = useProjectStore(
+    (store) => store.setSelectedVersion,
+  );
 
-  // const [messages, setMessages] = useState<ConvertibleMessage[]>([]);
-  //   const [answer, setAnswer] = useState<string[]>([]);
+  const { formRef } = useRemixForm({
+    onSuccess: ({ data }) => {
+      formRef.current?.reset();
+      if (data && "version" in data && typeof data.version === "number") {
+        setSelectedVersion(data.version);
+      }
+    },
+  });
+
   return (
     <Surface
       elevated
@@ -27,12 +41,22 @@ export function RevisionsInput() {
         size={spaceTokens.space32}
       />
       <Separator orientation="vertical" className="h-8" />
-      <input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        className="h-full w-full flex-1 bg-transparent outline-none border-none placeholder:text-foreground-dimmest text-foreground-default"
-        placeholder="Make the heading larger and darker"
-      />
+      <Form
+        method="POST"
+        className="w-full"
+        ref={formRef}
+        onSubmit={(e) => {
+          (e.target as HTMLFormElement).reset();
+        }}
+      >
+        <input
+          name="prompt"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className="h-full w-full flex-1 bg-transparent outline-none border-none placeholder:text-foreground-dimmest text-foreground-default"
+          placeholder="Make the heading larger and darker"
+        />
+      </Form>
       <Separator orientation="vertical" className="h-8" />
       <Tooltip>
         <TooltipTrigger asChild>

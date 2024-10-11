@@ -32,7 +32,6 @@ export function usePreviewStream(): Preview & { loading?: boolean } {
 
   useEffect(() => {
     if (complete) {
-      console.log(complete);
       setLoading(false);
     }
   }, [complete]);

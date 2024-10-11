@@ -89,7 +89,7 @@ export async function standard(
 export type StandardResponse = {
   success: boolean;
   message: string;
-  data?: object;
+  data?: Record<string, unknown>;
 };
 
 export function logStandardError(error: unknown, message: string) {

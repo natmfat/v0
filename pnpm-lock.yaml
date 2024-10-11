@@ -45,8 +45,8 @@ importers:
         specifier: ^7.7.0
         version: 7.7.0(@remix-run/node@2.12.1(typescript@5.6.2))(@remix-run/react@2.12.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2))(@remix-run/router@1.19.2)(react@18.3.1)(zod@3.23.8)
       tanukui:
-        specifier: ^0.0.61
-        version: 0.0.61(@types/react-dom@18.3.0)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^0.0.62
+        version: 0.0.62(@types/react-dom@18.3.0)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tsx:
         specifier: ^4.19.1
         version: 4.19.1
@@ -4145,8 +4145,8 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  tanukui@0.0.61:
-    resolution: {integrity: sha512-GKM+SLl6EeNBOD6QQk7ySpu+uubCRobm+JHqe450JsYQduvh6mjdGArREhFvgbxQgMyIU3QdT4AK6VtHa0qHVg==}
+  tanukui@0.0.62:
+    resolution: {integrity: sha512-AaBXBBXqe0Qxml7kzj+WwTE/FvagyOXoBLw4nOWIHuU25l2z/yVzy6Uo6e8IMWoSfN2qU6+HiJ6kQMxIX17Ukg==}
     peerDependencies:
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -9134,7 +9134,7 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tanukui@0.0.61(@types/react-dom@18.3.0)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  tanukui@0.0.62(@types/react-dom@18.3.0)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@radix-ui/react-accordion': 1.2.1(@types/react-dom@18.3.0)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-avatar': 1.1.1(@types/react-dom@18.3.0)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)

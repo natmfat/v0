@@ -19,11 +19,16 @@ export function PanelHistory() {
     <Surface
       elevated
       className={cn(
-        "rounded-default h-fit p-2 duration-chill transition-all items-center",
-        expanded && "w-48 items-stretch",
+        "rounded-default overflow-hidden max-h-full h-fit p-2 duration-chill transition-all gap-2 justify-stretch",
+        expanded && "w-48",
       )}
     >
-      <View className="items-center justify-between flex-row">
+      <View
+        className={cn(
+          "flex-row items-center justify-between border-b pb-2 bg-surface z-10 flex-shrink-0",
+          !expanded && "justify-center",
+        )}
+      >
         {expanded ? (
           <Heading level={2} size="subheadDefault">
             History
@@ -32,15 +37,13 @@ export function PanelHistory() {
         <IconButton
           alt="Toggle history"
           onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
+          variant="fill"
         >
           {expanded ? <RiArrowLeftDoubleIcon /> : <RiArrowRightDoubleIcon />}
         </IconButton>
       </View>
 
-      <View className="mt-2 gap-2">
-        {previews.length === 0 ? (
-          <HistoryPreview version={0} mini={!expanded} active />
-        ) : null}
+      <View className="flex-1 gap-2 overflow-y-auto">
         {previews.map((preview) => (
           <HistoryPreview
             key={preview.id}

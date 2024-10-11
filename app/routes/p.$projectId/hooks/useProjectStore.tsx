@@ -1,8 +1,9 @@
-import { createContext, ReactNode, useContext, useRef } from "react";
+import { ReactNode, createContext, useContext, useEffect, useRef } from "react";
 import { create, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { Preview } from "~/.server/models/ModelPreview";
 import { Nullable } from "~/lib/type";
+
 import { findPreview } from "../lib/projectStoreUtils";
 
 export enum Layout {
@@ -34,6 +35,7 @@ type Action = {
 
   setPreviewCode: (version: number, code: string) => void;
   setStreaming: (streaming: boolean) => void;
+
   // @todo add preview, set picker enabled, set selected element, setlayout, and so on
 };
 
@@ -84,6 +86,9 @@ export const ProjectStoreProvider = ({
   value: Partial<State>;
 }) => {
   const store = useRef(createProjectStore(value)).current;
+  useEffect(() => {
+    store.setState(value);
+  }, [value]);
   return (
     <ProjectStoreContext.Provider value={store}>
       {children}
