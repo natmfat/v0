@@ -12,11 +12,6 @@ import { ProjectStoreProvider } from "./hooks/useProjectStore";
 
 export { action } from "./action.server";
 
-export enum ActionIntent {
-  UPDATE_THUMBNAIL = "UPDATE_THUMBNAIL",
-  NEW_VERSION = "NEW_VERSION",
-}
-
 export function createRoute(projectId: string) {
   return `/p/${projectId}`;
 }
