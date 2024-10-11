@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Heading } from "tanukui/components/Heading.js";
 import { IconButton } from "tanukui/components/IconButton.js";
 import { Surface } from "tanukui/components/Surface.js";
@@ -47,8 +47,8 @@ export function PanelHistory() {
         {previews.map((preview) => (
           <HistoryPreview
             key={preview.id}
-            version={preview.version}
             mini={!expanded}
+            preview={preview}
             active={selectedVersion === preview.version}
           />
         ))}

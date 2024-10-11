@@ -4,28 +4,30 @@ import { Pill, PillProps } from "tanukui/components/Pill.js";
 import { Surface } from "tanukui/components/Surface.js";
 import { View } from "tanukui/components/View.js";
 import { cn } from "tanukui/lib/cn.js";
+import { type Preview } from "~/.server/models/ModelPreview";
 
 import { useProjectStore } from "../../hooks/useProjectStore";
 
 interface HistoryPreviewProps {
-  version: number;
   active?: boolean;
   mini?: boolean;
+  preview: Preview;
 }
 
-export function HistoryPreview(props: HistoryPreviewProps) {
+export function HistoryPreview({ preview, ...props }: HistoryPreviewProps) {
   const setSelectedVersion = useProjectStore(
     (store) => store.setSelectedVersion,
   );
 
   const onClick = useCallback(() => {
-    setSelectedVersion(props.version);
-  }, [props.version]);
+    setSelectedVersion(preview.version);
+  }, [preview.version]);
 
   if (props.mini) {
     return (
       <MiniHistoryPreview
         {...props}
+        preview={preview}
         variant="outline"
         onClick={onClick}
         color={props.active ? "primary" : "transparent"}
@@ -38,12 +40,17 @@ export function HistoryPreview(props: HistoryPreviewProps) {
       <View
         onClick={onClick}
         className={cn(
-          "h-24 rounded-default",
+          "h-24 rounded-default overflow-hidden",
           props.active && "border-primary-dimmer active:border-primary-default",
         )}
       >
+        <img
+          alt={preview.prompt}
+          src={preview.thumbnail_src}
+          className="h-full w-full"
+        />
         <Surface elevated={!props.mini} className="absolute bottom-1 left-1">
-          <MiniHistoryPreview version={props.version} active={props.active} />
+          <MiniHistoryPreview preview={preview} {...props} />
         </Surface>
       </View>
     </Interactive>
@@ -51,9 +58,9 @@ export function HistoryPreview(props: HistoryPreviewProps) {
 }
 
 function MiniHistoryPreview({
-  version,
   active,
   className,
+  preview,
   ...props
 }: HistoryPreviewProps & PillProps) {
   return (
@@ -67,7 +74,7 @@ function MiniHistoryPreview({
       variant="outlineStatic"
       {...props}
     >
-      v{version}
+      v{preview.version}
     </Pill>
   );
 }

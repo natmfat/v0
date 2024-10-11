@@ -1,4 +1,3 @@
-import invariant from "invariant";
 import { useContext, useEffect } from "react";
 import { Button } from "tanukui/components/Button.js";
 import { IconButton } from "tanukui/components/IconButton.js";
@@ -26,17 +25,13 @@ export function PanelPreview() {
   const streaming = useProjectStore((store) => store.streaming);
 
   const setPreviewCode = useProjectStore((store) => store.setPreviewCode);
-  const preview = useProjectStore((store) =>
-    findPreview(store.previews, store.selectedVersion),
-  );
+  const preview = useProjectStore((store) => store.getSelectedPreview());
 
   const showCode = useProjectStore((store) => store.showCode);
   const setShowCode = useProjectStore((store) => store.setShowCode);
   const setLayout = useProjectStore((store) => store.setLayout);
 
   const { addToast } = useContext(ToastContext);
-
-  invariant(preview, "expected a preview");
 
   const fetcher = useFetchStream({
     api: createRoute(projectId),
@@ -50,7 +45,7 @@ export function PanelPreview() {
     if (preview.code.length === 0) {
       fetcher.fetch();
     }
-  }, [preview]);
+  }, [fetcher, preview]);
 
   return (
     <Surface
@@ -128,7 +123,7 @@ export function PanelPreview() {
             </Text>
           </View>
         ) : (
-          <PreviewFrame code={preview.code} />
+          <PreviewFrame {...preview} />
         )}
       </View>
     </Surface>

@@ -1,0 +1,4 @@
+export enum ActionIntent {
+  UPDATE_THUMBNAIL = "UPDATE_THUMBNAIL",
+  NEW_VERSION = "NEW_VERSION",
+}

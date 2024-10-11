@@ -1,4 +1,4 @@
-import { INTENT } from "~/lib/ResourceBuilder";
+import { INTENT } from "~/lib/types";
 
 interface IntentProps<T> {
   value: T;

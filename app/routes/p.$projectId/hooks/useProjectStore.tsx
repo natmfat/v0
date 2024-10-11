@@ -1,8 +1,9 @@
+import invariant from "invariant";
 import { ReactNode, createContext, useContext, useEffect, useRef } from "react";
 import { create, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { Preview } from "~/.server/models/ModelPreview";
-import { Nullable } from "~/lib/type";
+import { Nullable } from "~/lib/types";
 
 import { findPreview } from "../lib/projectStoreUtils";
 
@@ -37,6 +38,8 @@ type Action = {
   setPreviewCode: (version: number, code: string) => void;
   setStreaming: (streaming: boolean) => void;
 
+  getSelectedPreview: () => Preview;
+
   // @todo add preview, set picker enabled, set selected element, setlayout, and so on
 };
 
@@ -44,7 +47,7 @@ export type ProjectStore = ReturnType<typeof createProjectStore>;
 
 export const createProjectStore = (initialState: Partial<State>) =>
   create<State & Action>()(
-    immer((set) => ({
+    immer((set, get) => ({
       projectId: "",
       previews: [],
       selectedVersion: 0,
@@ -79,6 +82,12 @@ export const createProjectStore = (initialState: Partial<State>) =>
         set((state) => {
           state.streaming = streaming;
         }),
+
+      getSelectedPreview: () => {
+        const preview = findPreview(get().previews, get().selectedVersion);
+        invariant(preview, "expected preview");
+        return preview;
+      },
     })),
   );
 
@@ -94,7 +103,7 @@ export const ProjectStoreProvider = ({
   const store = useRef(createProjectStore(value)).current;
   useEffect(() => {
     store.setState(value);
-  }, [value]);
+  }, [store, value]);
   return (
     <ProjectStoreContext.Provider value={store}>
       {children}

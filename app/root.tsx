@@ -7,12 +7,11 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import { ThemeProvider } from "tanukui/components/ThemeProvider.js";
-import { View } from "tanukui/components/View.js";
+import { ToastProvider } from "tanukui/components/Toast.js";
 import "tanukui/styles/core.css";
 import "tanukui/styles/themes/light.css";
 
 import "./tailwind.css";
-import { ToastProvider } from "tanukui/components/Toast.js";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -23,8 +22,7 @@ export const links: LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href:
-      "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;500;600&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;500;600&display=swap",
   },
 ];
 

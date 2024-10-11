@@ -28,7 +28,7 @@ export function useRemixForm({
         onError(typedActionData);
       }
     }
-  }, [navigation.state, actionData]);
+  }, [navigation.state, actionData, onSuccess, onError]);
 
   return { formRef };
 }

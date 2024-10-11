@@ -1,54 +1,55 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { CodeBlock, solarizedLight } from "react-code-blocks";
-import { Button } from "tanukui/components/Button.js";
-import { Interactive } from "tanukui/components/Interactive.js";
+import { useEffect, useRef, useState } from "react";
 import { Surface } from "tanukui/components/Surface.js";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "tanukui/components/Tabs.js";
+import { Tabs, TabsList, TabsTrigger } from "tanukui/components/Tabs.js";
 import { Text } from "tanukui/components/Text.js";
-import { ToastContext } from "tanukui/components/Toast.js";
 import { View } from "tanukui/components/View.js";
-import { RiClipboardIcon } from "tanukui/icons/RiClipboardIcon.js";
 import { RiHtml5Icon } from "tanukui/icons/RiHtml5Icon.js";
 import { RiReactjsIcon } from "tanukui/icons/RiReactjsIcon.js";
 import { cn } from "tanukui/lib/cn.js";
+import { type Preview } from "~/.server/models/ModelPreview";
 
 import { Layout, useProjectStore } from "../../hooks/useProjectStore";
-import { copyToClipboard } from "../../lib/copyToClipboard";
+import { useScreenshotFrame } from "../../hooks/useScreenshotFrame";
 import { FAKE_HTML, generateCode } from "../../lib/generateCode";
 import { TabsContentCode } from "./TabsContentCode";
 
-interface PreviewFrameProps {
-  /** AI generated React component */
-  code: string;
-}
-
-export function PreviewFrame({ code }: PreviewFrameProps) {
+export function PreviewFrame({
+  version,
+  thumbnail_src,
+  code,
+}: Pick<Preview, "version" | "thumbnail_src" | "code">) {
   const layout = useProjectStore((store) => store.layout);
-  const ref = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const showCode = useProjectStore((store) => store.showCode);
 
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
+  const { iframeRef, uploadScreenshot } = useScreenshotFrame({ version });
+
   useEffect(() => {
-    setWidth(ref.current?.offsetWidth || 0);
-    setHeight(ref.current?.offsetHeight || 0);
+    // technically thumbnail must exist (db schema, but I should probably change this - same with code)
+    // @todo better to have null than constantly doing length checks
+    if (!thumbnail_src || thumbnail_src.length === 0) {
+      uploadScreenshot();
+    }
+  }, [code]);
+
+  useEffect(() => {
+    setWidth(containerRef.current?.offsetWidth || 0);
+    setHeight(containerRef.current?.offsetHeight || 0);
   }, [layout, showCode]);
 
   return (
     <View className="h-full w-full flex-row gap-2">
       <View className="w-full h-full rounded-default overflow-hidden flex-1 border items-center px-4">
         <View
-          ref={ref}
+          ref={containerRef}
           className={cn("h-full flex-row relative", layoutToWidth(layout))}
         >
           <iframe
+            ref={iframeRef}
             title="Preview Code"
             srcDoc={generateCode(code)}
             className="h-full w-full outline-none border-x"

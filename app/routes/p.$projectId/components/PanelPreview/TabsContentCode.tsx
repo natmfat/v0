@@ -41,7 +41,7 @@ export function TabsContentCode({
         </Button>
         <CodeBlock
           text={code}
-          language="jsx"
+          language={language}
           showLineNumbers={false}
           theme={zenburn}
         />

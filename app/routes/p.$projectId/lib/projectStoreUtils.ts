@@ -1,5 +1,5 @@
 import { Preview } from "~/.server/models/ModelPreview";
-import { Nullable } from "~/lib/type";
+import { Nullable } from "~/lib/types";
 
 export function findPreview(
   previews: Preview[],

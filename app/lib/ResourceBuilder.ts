@@ -8,9 +8,8 @@ import {
 } from "@remix-run/node";
 import { ZodSchema, ZodTypeAny, z } from "zod";
 
+import { INTENT } from "./types";
 import { logStandardError, requireTruthy, standard } from "./utils.server";
-
-export const INTENT = "intent" as const;
 
 type RequestMethod = "DELETE" | "PATCH" | "POST" | "PUT" | "GET" | "ANY";
 type RequestParameter = "headers" | "params" | "query" | "body" | "formData";

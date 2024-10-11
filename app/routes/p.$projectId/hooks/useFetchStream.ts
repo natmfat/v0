@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { processLines } from "~/routes/api.ollama.$projectId/lib/processLines";
 
 import { useProjectStore } from "./useProjectStore";

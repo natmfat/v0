@@ -1,4 +1,4 @@
-import { Form, useRevalidator } from "@remix-run/react";
+import { Form } from "@remix-run/react";
 import { useState } from "react";
 import { Avatar } from "tanukui/components/Avatar.js";
 import { IconButton } from "tanukui/components/IconButton.js";
@@ -11,9 +11,11 @@ import {
 } from "tanukui/components/Tooltip.js";
 import { RiCursorIcon } from "tanukui/icons/RiCursorIcon.js";
 import { spaceTokens } from "tanukui/lib/tokens.js";
+import { Intent } from "~/components/Intent";
 
 import { useProjectStore } from "../hooks/useProjectStore";
 import { useRemixForm } from "../hooks/useRemixForm";
+import { ActionIntent } from "../types";
 
 export function RevisionsInput() {
   const [value, setValue] = useState("");
@@ -49,6 +51,7 @@ export function RevisionsInput() {
           className="h-full w-full flex-1 bg-transparent outline-none border-none placeholder:text-foreground-dimmest text-foreground-default"
           placeholder="Make the heading larger and darker"
         />
+        <Intent value={ActionIntent.NEW_VERSION} />
       </Form>
       <Separator orientation="vertical" className="h-8" />
       <Tooltip>

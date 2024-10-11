@@ -64,3 +64,14 @@ export async function updateCode({
     WHERE project_id = ${project_id} AND version = ${version}
   `;
 }
+
+export async function updateThumbnail({
+  project_id,
+  version,
+  thumbnail_src,
+}: Pick<Preview, "project_id" | "version" | "thumbnail_src">) {
+  await sql`
+    UPDATE preview_ SET thumbnail_src = ${thumbnail_src}
+    WHERE project_id = ${project_id} AND version = ${version}
+  `;
+}
