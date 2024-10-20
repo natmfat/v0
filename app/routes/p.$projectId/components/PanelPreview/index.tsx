@@ -14,12 +14,12 @@ import { RiLoader2Icon } from "natmfat/icons/RiLoader2Icon";
 import { RiPaintIcon } from "natmfat/icons/RiPaintIcon";
 import { RiSmartphoneIcon } from "natmfat/icons/RiSmartphoneIcon";
 import { RiTabletIcon } from "natmfat/icons/RiTabletIcon";
+import { copyToClipboard } from "natmfat/lib/copyToClipboard";
 import { useContext } from "react";
 import { createRoute } from "~/routes/api.iframe.$projectId.$version[.html]";
 
 import { Layout, useProjectStore } from "../../hooks/useProjectStore";
 import { useRequestStream } from "../../hooks/useRequestStream";
-import { copyToClipboard } from "../../lib/copyToClipboard";
 import { findPreview } from "../../lib/projectStoreUtils";
 import { PreviewFrame } from "./PreviewFrame";
 

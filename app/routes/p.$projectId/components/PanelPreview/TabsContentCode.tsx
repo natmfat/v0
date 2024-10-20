@@ -3,11 +3,10 @@ import { TabsContent } from "natmfat/components/Tabs";
 import { ToastContext } from "natmfat/components/Toast";
 import { View } from "natmfat/components/View";
 import { RiClipboardIcon } from "natmfat/icons/RiClipboardIcon";
+import { copyToClipboard } from "natmfat/lib/copyToClipboard";
 import { tokens } from "natmfat/lib/tokens";
 import { useContext } from "react";
 import { CodeBlock, zenburn } from "react-code-blocks";
-
-import { copyToClipboard } from "../../lib/copyToClipboard";
 
 interface TabsContentCodeProps {
   code: string;
