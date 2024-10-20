@@ -6,10 +6,9 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import { ThemeProvider } from "tanukui/components/ThemeProvider.js";
-import { ToastProvider } from "tanukui/components/Toast.js";
-import "tanukui/styles/core.css";
-import "tanukui/styles/themes/light.css";
+import { ThemeProvider } from "natmfat/components/ThemeProvider";
+import { ToastProvider } from "natmfat/components/Toast";
+import "natmfat/styles/core.css";
 
 import "./tailwind.css";
 

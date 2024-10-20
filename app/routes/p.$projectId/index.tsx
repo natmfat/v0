@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { View } from "tanukui/components/View.js";
+import { View } from "natmfat/components/View";
 import { ModelPreview, ModelProject } from "~/.server/models";
 import { notFound, requireTruthy } from "~/lib/utils.server";
 

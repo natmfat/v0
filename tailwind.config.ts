@@ -1,5 +1,5 @@
+import { tailwindConfig } from "natmfat/integrations/tailwind";
 import type { Config } from "tailwindcss";
-import { tailwindConfig } from "tanukui/lib/tailwindConfig.js";
 
 export default {
   ...tailwindConfig,

@@ -1,11 +1,11 @@
+import { Heading } from "natmfat/components/Heading";
+import { IconButton } from "natmfat/components/IconButton";
+import { Surface } from "natmfat/components/Surface";
+import { View } from "natmfat/components/View";
+import { RiArrowLeftDoubleIcon } from "natmfat/icons/RiArrowLeftDoubleIcon";
+import { RiArrowRightDoubleIcon } from "natmfat/icons/RiArrowRightDoubleIcon";
+import { cn } from "natmfat/lib/cn";
 import { useState } from "react";
-import { Heading } from "tanukui/components/Heading.js";
-import { IconButton } from "tanukui/components/IconButton.js";
-import { Surface } from "tanukui/components/Surface.js";
-import { View } from "tanukui/components/View.js";
-import { RiArrowLeftDoubleIcon } from "tanukui/icons/RiArrowLeftDoubleIcon.js";
-import { RiArrowRightDoubleIcon } from "tanukui/icons/RiArrowRightDoubleIcon.js";
-import { cn } from "tanukui/lib/cn.js";
 
 import { useProjectStore } from "../../hooks/useProjectStore";
 import { HistoryPreview } from "./HistoryPreview";

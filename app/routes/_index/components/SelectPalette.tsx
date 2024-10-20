@@ -1,13 +1,13 @@
-import { useMemo, useState } from "react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "tanukui/components/Select.js";
-import { View, ViewProps } from "tanukui/components/View.js";
-import { cn } from "tanukui/lib/cn.js";
+} from "natmfat/components/Select";
+import { View, ViewProps } from "natmfat/components/View";
+import { cn } from "natmfat/lib/cn";
+import { useMemo, useState } from "react";
 import { ModelPalette } from "~/.server/models";
 
 export function SelectPalette({

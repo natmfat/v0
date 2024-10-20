@@ -1,16 +1,16 @@
-import { useCallback } from "react";
-import { Interactive } from "tanukui/components/Interactive.js";
-import { Loading } from "tanukui/components/Loading.js";
-import { Pill, PillProps } from "tanukui/components/Pill.js";
-import { Surface } from "tanukui/components/Surface.js";
-import { Text } from "tanukui/components/Text.js";
+import { Interactive } from "natmfat/components/Interactive";
+import { Loading } from "natmfat/components/Loading";
+import { Pill, PillProps } from "natmfat/components/Pill";
+import { Surface } from "natmfat/components/Surface";
+import { Text } from "natmfat/components/Text";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "tanukui/components/Tooltip.js";
-import { View } from "tanukui/components/View.js";
-import { cn } from "tanukui/lib/cn.js";
+} from "natmfat/components/Tooltip";
+import { View } from "natmfat/components/View";
+import { cn } from "natmfat/lib/cn";
+import { useCallback } from "react";
 import { type Preview } from "~/.server/models/ModelPreview";
 
 import { useProjectStore } from "../../hooks/useProjectStore";

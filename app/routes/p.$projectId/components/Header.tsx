@@ -1,12 +1,12 @@
 import { Link } from "@remix-run/react";
-import { Avatar } from "tanukui/components/Avatar.js";
-import { Button } from "tanukui/components/Button.js";
-import { Pill } from "tanukui/components/Pill.js";
-import { Separator } from "tanukui/components/Separator.js";
-import { Text } from "tanukui/components/Text.js";
-import { View } from "tanukui/components/View.js";
-import { RiLockUnlockIcon } from "tanukui/icons/RiLockUnlockIcon.js";
-import { spaceTokens } from "tanukui/lib/tokens.js";
+import { Avatar } from "natmfat/components/Avatar";
+import { Button } from "natmfat/components/Button";
+import { Pill } from "natmfat/components/Pill";
+import { Separator } from "natmfat/components/Separator";
+import { Text } from "natmfat/components/Text";
+import { View } from "natmfat/components/View";
+import { RiLockUnlockIcon } from "natmfat/icons/RiLockUnlockIcon";
+import { spaceTokens } from "natmfat/lib/tokens";
 import { ROUTE } from "~/routes/_index";
 
 import { useProjectStore } from "../hooks/useProjectStore";
@@ -33,10 +33,10 @@ export default function Header() {
         </Pill>
       </View>
       <View className="flex-row gap-2">
-        <Button size={16} color="transparent" asChild>
+        <Button color="transparent" asChild>
           <Link to={ROUTE}>New Generation</Link>
         </Button>
-        <Button size={16} color="transparent" variant="outline">
+        <Button color="transparent" variant="outline">
           Feedback
         </Button>
       </View>

@@ -1,20 +1,21 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Anchor } from "natmfat/components/Anchor";
+import { Button } from "natmfat/components/Button";
+import { Heading } from "natmfat/components/Heading";
+import { IconButton } from "natmfat/components/IconButton";
+import { Interactive } from "natmfat/components/Interactive";
+import { MultilineInput } from "natmfat/components/MultilineInput";
+import { Pill } from "natmfat/components/Pill";
+import { Surface } from "natmfat/components/Surface";
+import { Text } from "natmfat/components/Text";
+import { View } from "natmfat/components/View";
+import { RiArrowRightIcon } from "natmfat/icons/RiArrowRightIcon";
+import { RiArrowRightUpIcon } from "natmfat/icons/RiArrowRightUpIcon";
+import { RiImageIcon } from "natmfat/icons/RiImageIcon";
+import { RiLockUnlockIcon } from "natmfat/icons/RiLockUnlockIcon";
+import { tokens } from "natmfat/lib/tokens";
 import { useState } from "react";
-import { Anchor } from "tanukui/components/Anchor.js";
-import { Button } from "tanukui/components/Button.js";
-import { Heading } from "tanukui/components/Heading.js";
-import { IconButton } from "tanukui/components/IconButton.js";
-import { Interactive } from "tanukui/components/Interactive.js";
-import { MultilineInput } from "tanukui/components/MultilineInput.js";
-import { Pill } from "tanukui/components/Pill.js";
-import { Surface } from "tanukui/components/Surface.js";
-import { Text } from "tanukui/components/Text.js";
-import { View } from "tanukui/components/View.js";
-import { RiArrowRightIcon } from "tanukui/icons/RiArrowRightIcon.js";
-import { RiArrowRightUpIcon } from "tanukui/icons/RiArrowRightUpIcon.js";
-import { RiImageIcon } from "tanukui/icons/RiImageIcon.js";
-import { RiLockUnlockIcon } from "tanukui/icons/RiLockUnlockIcon.js";
 import { ModelPalette, ModelProject } from "~/.server/models";
 
 import { createRoute } from "../p.$projectId";
@@ -79,11 +80,11 @@ export default function Index() {
             />
             <View className="flex-row mt-2 justify-between">
               <View className="flex-row gap-2">
-                <Button size={16} color="transparent" type="button">
+                <Button color="transparent" type="button">
                   <RiImageIcon />
                   Image
                 </Button>
-                <Button size={16} color="transparent" type="button">
+                <Button color="transparent" type="button">
                   <RiLockUnlockIcon />
                   Public
                 </Button>
@@ -92,7 +93,7 @@ export default function Index() {
               <IconButton
                 alt="Submit"
                 className="h-8 w-8"
-                size={28}
+                size={tokens.space28}
                 type="submit"
               >
                 <RiArrowRightIcon />

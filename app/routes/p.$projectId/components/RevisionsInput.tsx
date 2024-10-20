@@ -1,15 +1,15 @@
 import { Form } from "@remix-run/react";
-import { Avatar } from "tanukui/components/Avatar.js";
-import { IconButton } from "tanukui/components/IconButton.js";
-import { Separator } from "tanukui/components/Separator.js";
-import { Surface } from "tanukui/components/Surface.js";
+import { Avatar } from "natmfat/components/Avatar";
+import { IconButton } from "natmfat/components/IconButton";
+import { Separator } from "natmfat/components/Separator";
+import { Surface } from "natmfat/components/Surface";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "tanukui/components/Tooltip.js";
-import { RiCursorIcon } from "tanukui/icons/RiCursorIcon.js";
-import { spaceTokens } from "tanukui/lib/tokens.js";
+} from "natmfat/components/Tooltip";
+import { RiCursorIcon } from "natmfat/icons/RiCursorIcon";
+import { spaceTokens } from "natmfat/lib/tokens";
 import { Intent } from "~/components/Intent";
 
 import { useProjectStore } from "../hooks/useProjectStore";

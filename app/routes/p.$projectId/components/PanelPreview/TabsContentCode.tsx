@@ -1,10 +1,11 @@
+import { Button } from "natmfat/components/Button";
+import { TabsContent } from "natmfat/components/Tabs";
+import { ToastContext } from "natmfat/components/Toast";
+import { View } from "natmfat/components/View";
+import { RiClipboardIcon } from "natmfat/icons/RiClipboardIcon";
+import { tokens } from "natmfat/lib/tokens";
 import { useContext } from "react";
 import { CodeBlock, zenburn } from "react-code-blocks";
-import { Button } from "tanukui/components/Button.js";
-import { TabsContent } from "tanukui/components/Tabs.js";
-import { ToastContext } from "tanukui/components/Toast.js";
-import { View } from "tanukui/components/View.js";
-import { RiClipboardIcon } from "tanukui/icons/RiClipboardIcon.js";
 
 import { copyToClipboard } from "../../lib/copyToClipboard";
 
@@ -25,7 +26,7 @@ export function TabsContentCode({
     <TabsContent value={value} asChild>
       <View className="flex-1 max-h-full overflow-hidden relative rounded-default font-mono flex [&>span]:h-full">
         <Button
-          size={12}
+          size={tokens.space12}
           className="absolute bottom-2 right-2"
           color="transparent"
           onClick={() => {

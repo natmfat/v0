@@ -14,7 +14,7 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   ssr: {
-    noExternal: ["tanukui"],
+    noExternal: ["natmfat"],
   },
   assetsInclude: ["**/*.txt"],
 });

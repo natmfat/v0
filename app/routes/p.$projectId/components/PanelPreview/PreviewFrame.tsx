@@ -1,11 +1,11 @@
+import { Surface } from "natmfat/components/Surface";
+import { Tabs, TabsList, TabsTrigger } from "natmfat/components/Tabs";
+import { Text } from "natmfat/components/Text";
+import { View } from "natmfat/components/View";
+import { RiHtml5Icon } from "natmfat/icons/RiHtml5Icon";
+import { RiReactjsIcon } from "natmfat/icons/RiReactjsIcon";
+import { cn } from "natmfat/lib/cn";
 import { useEffect, useRef, useState } from "react";
-import { Surface } from "tanukui/components/Surface.js";
-import { Tabs, TabsList, TabsTrigger } from "tanukui/components/Tabs.js";
-import { Text } from "tanukui/components/Text.js";
-import { View } from "tanukui/components/View.js";
-import { RiHtml5Icon } from "tanukui/icons/RiHtml5Icon.js";
-import { RiReactjsIcon } from "tanukui/icons/RiReactjsIcon.js";
-import { cn } from "tanukui/lib/cn.js";
 import { type Preview } from "~/.server/models/ModelPreview";
 
 import { Layout, useProjectStore } from "../../hooks/useProjectStore";
