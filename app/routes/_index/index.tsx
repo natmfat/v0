@@ -31,8 +31,7 @@ export const meta: MetaFunction = () => {
     { title: "v0" },
     {
       name: "description",
-      content:
-        "Generate UI with repl-community/ui from text prompts and images.",
+      content: "Generate UI with text prompts and images.",
     },
   ];
 };
@@ -57,7 +56,7 @@ export default function Index() {
           Generate. Refine. Ship.
         </Heading>
         <Text multiline className="mt-1">
-          Generate UI with repl-community/ui from text prompts and images.
+          Generate UI with text prompts and images.
         </Text>
         <Surface
           className="p-2 elevated border border-interactive rounded-default block mt-6 shadow-1"

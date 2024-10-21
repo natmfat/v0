@@ -1,3 +1,3 @@
 # v0
 
-Generate UI with repl-community/ui from text prompts and images.
+Generate UI with text prompts and images.
