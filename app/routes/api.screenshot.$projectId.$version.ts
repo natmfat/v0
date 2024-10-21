@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
+import { RemixLoader } from "remix-endpoint";
 import { z } from "zod";
 import { ModelPreview } from "~/.server/models";
-import { ResourceBuilder } from "~/lib/ResourceBuilder";
 import { standard } from "~/lib/utils.server";
 
 import { createRoute as createPreviewRoute } from "./api.iframe.$projectId.$version[.html]";
@@ -10,7 +10,7 @@ export function createRoute(projectId: string, version: number = 0) {
   return `/api/screenshot/${projectId}/${version}`;
 }
 
-export const loader = new ResourceBuilder()
+export const loader = new RemixLoader()
   .register({
     method: "GET",
     validate: {

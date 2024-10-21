@@ -1,11 +1,11 @@
 import { redirect } from "@remix-run/node";
+import { RemixAction } from "remix-endpoint";
 import { zfd } from "zod-form-data";
 import { ModelPreview, ModelProject } from "~/.server/models";
-import { ResourceBuilder } from "~/lib/ResourceBuilder";
 
 // @todo error handling or something?
 
-export const action = new ResourceBuilder()
+export const action = new RemixAction()
   .register({
     method: "POST",
     validate: {

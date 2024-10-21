@@ -1,8 +1,8 @@
+import { RemixLoader } from "remix-endpoint";
 import { html } from "remix-utils/responses";
 import { z } from "zod";
 import { sql } from "~/.server/database";
 import { Preview } from "~/.server/models/ModelPreview";
-import { ResourceBuilder } from "~/lib/ResourceBuilder";
 import { requireTruthy } from "~/lib/utils.server";
 
 import { generateCode } from "./p.$projectId/lib/generateCode";
@@ -11,7 +11,7 @@ export function createRoute(projectId: string, version: number = 0) {
   return `/api/iframe/${projectId}/${version}.html`;
 }
 
-export const loader = new ResourceBuilder()
+export const loader = new RemixLoader()
   .register({
     method: "GET",
     validate: {

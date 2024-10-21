@@ -1,15 +1,15 @@
 import { streamText } from "ai";
 import { ollama } from "ollama-ai-provider";
+import { RemixLoader } from "remix-endpoint";
 import { z } from "zod";
 import { ModelPreview } from "~/.server/models";
-import { ResourceBuilder } from "~/lib/ResourceBuilder";
 import { notFound, requireTruthy, standard } from "~/lib/utils.server";
 
 import { processLines } from "./lib/processLines";
 import systemPromptAdjust from "./lib/prompt/systemAdjust.txt?raw";
 import systemPromptDefault from "./lib/prompt/systemDefault.txt?raw";
 
-export const loader = new ResourceBuilder()
+export const loader = new RemixLoader()
   .register({
     method: "GET",
     validate: {

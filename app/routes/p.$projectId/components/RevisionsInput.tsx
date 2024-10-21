@@ -10,11 +10,13 @@ import {
 } from "natmfat/components/Tooltip";
 import { RiCursorIcon } from "natmfat/icons/RiCursorIcon";
 import { spaceTokens } from "natmfat/lib/tokens";
-import { Intent } from "~/components/Intent";
+import { createIntent } from "remix-endpoint/react/createIntent";
 
 import { useProjectStore } from "../hooks/useProjectStore";
 import { useRemixForm } from "../hooks/useRemixForm";
 import { ActionIntent } from "../types";
+
+const Intent = createIntent<ActionIntent>();
 
 export function RevisionsInput() {
   const setSelectedVersion = useProjectStore(

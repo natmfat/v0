@@ -1,12 +1,12 @@
+import { RemixAction } from "remix-endpoint";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 import { ModelPreview } from "~/.server/models";
-import { ResourceBuilder } from "~/lib/ResourceBuilder";
 import { requireTruthy, standard } from "~/lib/utils.server";
 
 import { ActionIntent } from "./types";
 
-export const action = new ResourceBuilder()
+export const action = new RemixAction()
   .register({
     method: "POST",
     intent: ActionIntent.NEW_VERSION,
