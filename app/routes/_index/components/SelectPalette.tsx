@@ -1,3 +1,4 @@
+import { PaletteData } from "database/client";
 import {
   Select,
   SelectContent,
@@ -8,13 +9,8 @@ import {
 import { View, ViewProps } from "natmfat/components/View";
 import { cn } from "natmfat/lib/cn";
 import { useMemo, useState } from "react";
-import { ModelPalette } from "~/.server/models";
 
-export function SelectPalette({
-  palettes,
-}: {
-  palettes: ModelPalette.Palette[];
-}) {
+export function SelectPalette({ palettes }: { palettes: PaletteData[] }) {
   const [value, setValue] = useState(palettes[0].id.toString() as string);
   const selectedPalette = useMemo(
     () => palettes.find((palette) => palette.id.toString() === value)!,
@@ -52,8 +48,8 @@ export function PaletteThumbnail({
   colors,
   className,
   ...props
-}: ViewProps & { colors: ModelPalette.Palette["thumbnail_colors"] }) {
-  return (
+}: ViewProps & { colors: PaletteData["thumbnail_colors"] }) {
+  return colors ? (
     <View
       className={cn("flex-row rounded-md overflow-hidden", className)}
       {...props}
@@ -66,5 +62,5 @@ export function PaletteThumbnail({
         />
       ))}
     </View>
-  );
+  ) : null;
 }
