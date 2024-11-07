@@ -1,8 +1,8 @@
+import { PreviewData } from "database/client";
 import { RemixLoader } from "remix-endpoint";
 import { html } from "remix-utils/responses";
 import { z } from "zod";
 import { sql } from "~/.server/database";
-import { Preview } from "~/.server/models/ModelPreview";
 import { requireTruthy } from "~/lib/utils.server";
 
 import { generateCode } from "./p.$projectId/lib/generateCode";
@@ -23,12 +23,12 @@ export const loader = new RemixLoader()
     handler: async ({ params: { projectId, version } }) => {
       const preview =
         (
-          await sql<Pick<Preview, "code">[]>`
-      SELECT code FROM preview_
-      WHERE project_id = ${projectId} AND version = ${version}
-    `
+          await sql<Pick<PreviewData, "code">[]>`
+            SELECT code FROM preview_
+            WHERE project_id = ${projectId} AND version = ${version}
+          `
         )[0] || null;
-      requireTruthy(preview, "expected to find preview");
+      requireTruthy(preview && preview.code, "expected to find preview");
       return html(generateCode(preview.code));
     },
   })

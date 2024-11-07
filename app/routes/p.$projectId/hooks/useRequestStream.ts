@@ -1,5 +1,6 @@
+import { PreviewData } from "database/client";
+import invariant from "invariant";
 import { useCallback, useEffect, useRef } from "react";
-import { Preview } from "~/.server/models/ModelPreview";
 import { createRoute } from "~/routes/api.ollama.$projectId.$version";
 import { processLines } from "~/routes/api.ollama.$projectId.$version/lib/processLines";
 
@@ -10,7 +11,7 @@ import { useProjectStore } from "./useProjectStore";
 export function useRequestStream({
   version,
   code,
-}: Pick<Preview, "version" | "code">) {
+}: Pick<PreviewData, "version" | "code">) {
   const projectId = useProjectStore((store) => store.projectId);
   const updatePreview = useProjectStore((store) => store.updatePreview);
   const setGlobalStreaming = useProjectStore((store) => store.setStreaming);
@@ -32,13 +33,14 @@ export function useRequestStream({
   );
 
   const requestStream = useCallback(async () => {
+    invariant(typeof version === "number", "expected version");
+
     if (isStreaming() || stop.current) {
       return;
     }
 
     setStreaming(true);
     const response = await fetch(createRoute(projectId, version));
-
     if (!response.ok) {
       stop.current = true;
       setStreaming(false);

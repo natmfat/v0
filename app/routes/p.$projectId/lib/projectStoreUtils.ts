@@ -1,9 +1,9 @@
-import { Preview } from "~/.server/models/ModelPreview";
-import { Nullable } from "~/lib/types";
+import { PreviewData } from "database/client";
+import { Nullable } from "node_modules/shitgen/dist/types";
 
 export function findPreview(
-  previews: Preview[],
+  previews: PreviewData[],
   version: number,
-): Nullable<Preview> {
+): Nullable<PreviewData> {
   return previews.find((preview) => preview.version === version) || null;
 }

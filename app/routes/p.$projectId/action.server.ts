@@ -1,3 +1,4 @@
+import { shitgen } from "database/client";
 import { RemixAction } from "remix-endpoint";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
@@ -26,11 +27,14 @@ export const action = new RemixAction()
       requireTruthy(preview, "expected a preview");
       const nextVersion = preview.version + 1;
       try {
-        await ModelPreview.create({
-          project_id,
-          version: nextVersion,
-          prompt,
-          code: "",
+        await shitgen.preview.create({
+          data: {
+            project_id,
+            version: nextVersion,
+            prompt,
+            code: "",
+            thumbnail_src: null,
+          },
         });
       } catch (error) {
         return standard(false, "failed to create preview");

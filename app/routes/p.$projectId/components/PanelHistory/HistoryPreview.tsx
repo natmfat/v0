@@ -1,3 +1,4 @@
+import { PreviewData } from "database/client";
 import { Interactive } from "natmfat/components/Interactive";
 import { Loading } from "natmfat/components/Loading";
 import { Pill, PillProps } from "natmfat/components/Pill";
@@ -11,7 +12,6 @@ import {
 import { View } from "natmfat/components/View";
 import { cn } from "natmfat/lib/cn";
 import { useCallback } from "react";
-import { type Preview } from "~/.server/models/ModelPreview";
 
 import { useProjectStore } from "../../hooks/useProjectStore";
 import { useRequestScreenshot } from "../../hooks/useRequestScreenshot";
@@ -19,7 +19,7 @@ import { useRequestScreenshot } from "../../hooks/useRequestScreenshot";
 interface HistoryPreviewProps {
   mini?: boolean;
   active?: boolean;
-  preview: Preview;
+  preview: PreviewData;
 }
 
 export function HistoryPreview({ mini, active, preview }: HistoryPreviewProps) {
@@ -28,7 +28,9 @@ export function HistoryPreview({ mini, active, preview }: HistoryPreviewProps) {
   );
 
   const onClick = useCallback(() => {
-    setSelectedVersion(preview.version);
+    if (typeof preview.version === "number") {
+      setSelectedVersion(preview.version);
+    }
   }, [preview.version, setSelectedVersion]);
 
   useRequestScreenshot(preview);

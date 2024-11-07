@@ -1,7 +1,7 @@
+import { PreviewData } from "database/client";
 import { ReactNode, createContext, useContext, useEffect, useRef } from "react";
 import { create, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { Preview } from "~/.server/models/ModelPreview";
 import { Nullable } from "~/lib/types";
 
 import { findPreview } from "../lib/projectStoreUtils";
@@ -18,7 +18,7 @@ type State = {
   /** version 0 query that the user submitted */
   initialPrompt: string;
 
-  previews: Array<Preview>;
+  previews: Array<PreviewData>;
   selectedVersion: number;
   showCode: boolean;
   layout: Layout;
@@ -34,7 +34,7 @@ type Action = {
   setShowCode: (showCode: boolean) => void;
   setLayout: (layout: Layout) => void;
 
-  updatePreview: (version: number, data: Partial<Preview>) => void;
+  updatePreview: (version: number, data: Partial<PreviewData>) => void;
   setStreaming: (streaming: boolean) => void;
 
   // @todo add preview, set picker enabled, set selected element, setlayout, and so on

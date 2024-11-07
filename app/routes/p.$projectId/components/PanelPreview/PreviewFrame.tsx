@@ -1,3 +1,4 @@
+import { PreviewData } from "database/client";
 import { Surface } from "natmfat/components/Surface";
 import { Tabs, TabsList, TabsTrigger } from "natmfat/components/Tabs";
 import { Text } from "natmfat/components/Text";
@@ -6,13 +7,12 @@ import { RiHtml5Icon } from "natmfat/icons/RiHtml5Icon";
 import { RiReactjsIcon } from "natmfat/icons/RiReactjsIcon";
 import { cn } from "natmfat/lib/cn";
 import { useEffect, useRef, useState } from "react";
-import { type Preview } from "~/.server/models/ModelPreview";
 
 import { Layout, useProjectStore } from "../../hooks/useProjectStore";
 import { FAKE_HTML, generateCode } from "../../lib/generateCode";
 import { TabsContentCode } from "./TabsContentCode";
 
-export function PreviewFrame({ code }: Pick<Preview, "code">) {
+export function PreviewFrame({ code }: Pick<PreviewData, "code">) {
   const layout = useProjectStore((store) => store.layout);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -67,7 +67,7 @@ export function PreviewFrame({ code }: Pick<Preview, "code">) {
               </TabsTrigger>
             </TabsList>
             <TabsContentCode value="html" language="html" code={FAKE_HTML} />
-            <TabsContentCode value="entry" code={code} />
+            <TabsContentCode value="entry" code={code || ""} />
           </Tabs>
         </View>
       ) : null}

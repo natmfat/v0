@@ -1,8 +1,8 @@
 import { streamText } from "ai";
+import { shitgen } from "database/client";
 import { ollama } from "ollama-ai-provider";
 import { RemixLoader } from "remix-endpoint";
 import { z } from "zod";
-import { ModelPreview } from "~/.server/models";
 import { notFound, requireTruthy, standard } from "~/lib/utils.server";
 
 import { processLines } from "./lib/processLines";
@@ -19,18 +19,22 @@ export const loader = new RemixLoader()
       }),
     },
     handler: async ({ params: { projectId: project_id, version } }) => {
-      const preview = await ModelPreview.findByVersion({ project_id, version });
+      const preview = await shitgen.preview.find({
+        where: { project_id, version },
+      });
       requireTruthy(preview, notFound());
 
       function onFinish(code: string) {
-        ModelPreview.updateCode({
-          project_id,
-          version,
-          code,
+        shitgen.preview.update({
+          data: { code },
+          where: {
+            project_id,
+            version,
+          },
         });
       }
 
-      if (preview.code.length !== 0) {
+      if (preview && preview.code?.length !== 0) {
         // this shouldn't be possible btw
         return standard(
           false,
@@ -50,7 +54,10 @@ export const loader = new RemixLoader()
 
       // get all previous prompts & code (remove last, that's the current prompt)
       // @todo could be more efficient
-      const previews = await ModelPreview.findLimited({ project_id });
+      const previews = await shitgen.preview.findMany({
+        select: ["code", "prompt"],
+        where: { project_id },
+      });
       previews.pop();
 
       const prevPrompts = previews.map(

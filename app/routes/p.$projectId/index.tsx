@@ -1,7 +1,7 @@
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { PreviewData, shitgen } from "database/client";
 import { View } from "natmfat/components/View";
-import { ModelPreview, ModelProject } from "~/.server/models";
 import { notFound, requireTruthy } from "~/lib/utils.server";
 
 import Header from "./components/Header";
@@ -19,20 +19,28 @@ export function createRoute(projectId: string) {
 export async function loader({ params }: LoaderFunctionArgs) {
   const projectId = params.projectId;
   requireTruthy(projectId, notFound());
-  const project = await ModelProject.find({ id: projectId });
+
+  const project = await shitgen.project
+    .find({
+      where: { id: projectId },
+    })
+    .catch(() => null);
   requireTruthy(project, notFound());
-  const previews = await ModelPreview.find({ project_id: projectId });
 
   return {
     projectId,
     project,
-    previews,
+    previews: (await shitgen.preview
+      .findMany({
+        where: { project_id: projectId },
+      })
+      .catch(() => [])) as unknown as Array<PreviewData>,
   };
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   if (data) {
-    return [{ title: data.project.project_prompt }];
+    return [{ title: data.project.prompt }];
   }
 
   return [];
@@ -41,7 +49,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function Project() {
   const {
     projectId,
-    project: { project_prompt },
+    project: { prompt },
     previews,
   } = useLoaderData<typeof loader>();
 
@@ -49,7 +57,7 @@ export default function Project() {
     <ProjectStoreProvider
       value={{
         projectId,
-        initialPrompt: project_prompt,
+        initialPrompt: prompt,
         previews,
       }}
     >

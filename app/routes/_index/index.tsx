@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
+import { PreviewData, ProjectData, shitgen, sql } from "database/client";
 import { Anchor } from "natmfat/components/Anchor";
 import { Button } from "natmfat/components/Button";
 import { Heading } from "natmfat/components/Heading";
@@ -16,7 +17,6 @@ import { RiImageIcon } from "natmfat/icons/RiImageIcon";
 import { RiLockUnlockIcon } from "natmfat/icons/RiLockUnlockIcon";
 import { tokens } from "natmfat/lib/tokens";
 import { useState } from "react";
-import { ModelPalette, ModelProject } from "~/.server/models";
 
 import { createRoute } from "../p.$projectId";
 import { SelectPalette } from "./components/SelectPalette";
@@ -39,8 +39,17 @@ export const meta: MetaFunction = () => {
 export async function loader() {
   return {
     stableSuggestion: getRandomSuggestion(Math.random()),
-    palettes: await ModelPalette.findAll(),
-    projects: await ModelProject.findAllWithPreview(),
+    palettes: await shitgen.palette.findMany({}),
+    projects: await sql<
+      Array<
+        Pick<ProjectData, "id" | "prompt"> &
+          Pick<PreviewData, "version" | "thumbnail_src">
+      >
+    >`
+      SELECT project_.id AS id, project_.prompt AS prompt, preview_.version AS version, preview_.thumbnail_src AS thumbnail_src FROM project_
+      LEFT JOIN preview_ ON project_.id = preview_.project_id
+      WHERE preview_.version = 0 AND project_.public = true;
+    `,
   };
 }
 
@@ -118,11 +127,13 @@ export default function Index() {
       </View>
       <View className="mt-28 grid grid-cols-3 gap-4 w-full">
         {projects.map((project) => (
-          <Link key={project.project_id} to={createRoute(project.project_id)}>
+          <Link key={project.id} to={createRoute(project.id)}>
             <View className="gap-2 text-center">
-              <Interactive>
-                <img src={project.thumbnail_src} alt={project.prompt} />
-              </Interactive>
+              {project.thumbnail_src ? (
+                <Interactive>
+                  <img src={project.thumbnail_src} alt={project.prompt} />
+                </Interactive>
+              ) : null}
               <Text maxLines={2}>{project.prompt}</Text>
             </View>
           </Link>

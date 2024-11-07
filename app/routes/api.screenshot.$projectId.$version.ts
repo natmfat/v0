@@ -1,7 +1,7 @@
+import { shitgen } from "database/client";
 import puppeteer from "puppeteer";
 import { RemixLoader } from "remix-endpoint";
 import { z } from "zod";
-import { ModelPreview } from "~/.server/models";
 import { standard } from "~/lib/utils.server";
 
 import { createRoute as createPreviewRoute } from "./api.iframe.$projectId.$version[.html]";
@@ -49,10 +49,14 @@ export const loader = new RemixLoader()
 
       // save screenshot
       const thumbnail_src = `data:image/png;base64,${data}`;
-      await ModelPreview.updateThumbnail({
-        project_id,
-        version,
-        thumbnail_src,
+      await shitgen.preview.update({
+        data: {
+          thumbnail_src,
+        },
+        where: {
+          project_id,
+          version,
+        },
       });
 
       return standard(true, "created screenshot", {

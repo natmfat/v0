@@ -1,5 +1,6 @@
+import { PreviewData } from "database/client";
+import invariant from "invariant";
 import { useCallback, useEffect, useRef } from "react";
-import { Preview } from "~/.server/models/ModelPreview";
 import { StandardResponse } from "~/lib/utils.server";
 import { createRoute } from "~/routes/api.screenshot.$projectId.$version";
 
@@ -9,7 +10,7 @@ export function useRequestScreenshot({
   code,
   version,
   thumbnail_src,
-}: Pick<Preview, "version" | "thumbnail_src" | "code">) {
+}: Pick<PreviewData, "version" | "thumbnail_src" | "code">) {
   const projectId = useProjectStore((store) => store.projectId);
 
   const isLoadingRef = useRef(false);
@@ -23,6 +24,7 @@ export function useRequestScreenshot({
     }
 
     isLoadingRef.current = true;
+    invariant(typeof version === "number", "expected version");
     const response = await fetch(createRoute(projectId, version));
     const { success, data } = (await response.json()) as StandardResponse<{
       thumbnail_src: string;
@@ -38,7 +40,11 @@ export function useRequestScreenshot({
   useEffect(() => {
     // technically thumbnail must exist (db schema, but I should probably change this - same with code)
     // @todo better to have null than constantly doing length checks
-    if ((!thumbnail_src || thumbnail_src.length === 0) && code.length > 0) {
+    if (
+      (!thumbnail_src || thumbnail_src.length === 0) &&
+      code &&
+      code.length > 0
+    ) {
       requestScreenshot();
     }
   }, [thumbnail_src, code, requestScreenshot]);

@@ -1,7 +1,7 @@
 import { redirect } from "@remix-run/node";
+import { shitgen } from "database/client";
 import { RemixAction } from "remix-endpoint";
 import { zfd } from "zod-form-data";
-import { ModelPreview, ModelProject } from "~/.server/models";
 
 // @todo error handling or something?
 
@@ -16,12 +16,18 @@ export const action = new RemixAction()
     },
     handler: async ({ formData }) => {
       // create project & v0
-      const project = await ModelProject.create(formData);
-      await ModelPreview.create({
-        project_id: project.id,
-        version: 0,
-        prompt: formData.prompt,
-        code: "",
+      const project = await shitgen.project.create({
+        select: ["id"],
+        data: formData,
+      });
+      await shitgen.preview.create({
+        data: {
+          project_id: project.id,
+          version: 0,
+          prompt: formData.prompt,
+          code: "",
+          thumbnail_src: null,
+        },
       });
       return redirect(`p/${project.id}`);
     },
