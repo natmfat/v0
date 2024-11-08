@@ -1,8 +1,7 @@
-import { shitgen } from "database/client";
 import { RemixAction } from "remix-endpoint";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
-import { ModelPreview } from "~/.server/models";
+import { shitgen } from "~/.server/database/client";
 import { requireTruthy, standard } from "~/lib/utils.server";
 
 import { ActionIntent } from "./types";
@@ -23,7 +22,10 @@ export const action = new RemixAction()
       params: { projectId: project_id },
       formData: { prompt },
     }) => {
-      const preview = await ModelPreview.findLatestVersion({ project_id });
+      const preview = await shitgen.preview.find({
+        where: { project_id },
+        orderBy: { version: "DESC" },
+      });
       requireTruthy(preview, "expected a preview");
       const nextVersion = preview.version + 1;
       try {

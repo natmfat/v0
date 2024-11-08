@@ -1,8 +1,8 @@
 import { streamText } from "ai";
-import { shitgen } from "database/client";
 import { ollama } from "ollama-ai-provider";
 import { RemixLoader } from "remix-endpoint";
 import { z } from "zod";
+import { shitgen } from "~/.server/database/client";
 import { notFound, requireTruthy, standard } from "~/lib/utils.server";
 
 import { processLines } from "./lib/processLines";

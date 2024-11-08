@@ -1,5 +1,5 @@
-import { PreviewData } from "database/client";
 import { Nullable } from "node_modules/shitgen/dist/types";
+import { PreviewData } from "~/.server/database/client";
 
 export function findPreview(
   previews: PreviewData[],

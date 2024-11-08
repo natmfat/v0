@@ -1,6 +1,6 @@
-import { PreviewData } from "database/client";
 import invariant from "invariant";
 import { useCallback, useEffect, useRef } from "react";
+import { PreviewData } from "~/.server/database/client";
 import { StandardResponse } from "~/lib/utils.server";
 import { createRoute } from "~/routes/api.screenshot.$projectId.$version";
 
@@ -24,7 +24,6 @@ export function useRequestScreenshot({
     }
 
     isLoadingRef.current = true;
-    invariant(typeof version === "number", "expected version");
     const response = await fetch(createRoute(projectId, version));
     const { success, data } = (await response.json()) as StandardResponse<{
       thumbnail_src: string;

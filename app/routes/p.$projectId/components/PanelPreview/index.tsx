@@ -32,7 +32,6 @@ export function PanelPreview() {
   );
 
   invariant(preview, "expected preview");
-  invariant(typeof preview.version === "number", "expected version");
 
   const showCode = useProjectStore((store) => store.showCode);
   const setShowCode = useProjectStore((store) => store.setShowCode);

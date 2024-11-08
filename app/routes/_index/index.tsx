@@ -1,6 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
-import { PreviewData, ProjectData, shitgen, sql } from "database/client";
 import { Anchor } from "natmfat/components/Anchor";
 import { Button } from "natmfat/components/Button";
 import { Heading } from "natmfat/components/Heading";
@@ -17,6 +16,12 @@ import { RiImageIcon } from "natmfat/icons/RiImageIcon";
 import { RiLockUnlockIcon } from "natmfat/icons/RiLockUnlockIcon";
 import { tokens } from "natmfat/lib/tokens";
 import { useState } from "react";
+import {
+  PreviewData,
+  ProjectData,
+  shitgen,
+  sql,
+} from "~/.server/database/client";
 
 import { createRoute } from "../p.$projectId";
 import { SelectPalette } from "./components/SelectPalette";

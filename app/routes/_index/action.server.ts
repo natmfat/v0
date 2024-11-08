@@ -1,7 +1,7 @@
 import { redirect } from "@remix-run/node";
-import { shitgen } from "database/client";
 import { RemixAction } from "remix-endpoint";
 import { zfd } from "zod-form-data";
+import { shitgen } from "~/.server/database/client";
 
 // @todo error handling or something?
 

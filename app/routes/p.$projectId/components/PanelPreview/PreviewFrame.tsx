@@ -1,4 +1,3 @@
-import { PreviewData } from "database/client";
 import { Surface } from "natmfat/components/Surface";
 import { Tabs, TabsList, TabsTrigger } from "natmfat/components/Tabs";
 import { Text } from "natmfat/components/Text";
@@ -7,6 +6,7 @@ import { RiHtml5Icon } from "natmfat/icons/RiHtml5Icon";
 import { RiReactjsIcon } from "natmfat/icons/RiReactjsIcon";
 import { cn } from "natmfat/lib/cn";
 import { useEffect, useRef, useState } from "react";
+import { PreviewData } from "~/.server/database/client";
 
 import { Layout, useProjectStore } from "../../hooks/useProjectStore";
 import { FAKE_HTML, generateCode } from "../../lib/generateCode";

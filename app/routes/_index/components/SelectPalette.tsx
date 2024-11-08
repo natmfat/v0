@@ -1,4 +1,3 @@
-import { PaletteData } from "database/client";
 import {
   Select,
   SelectContent,
@@ -9,6 +8,7 @@ import {
 import { View, ViewProps } from "natmfat/components/View";
 import { cn } from "natmfat/lib/cn";
 import { useMemo, useState } from "react";
+import { PaletteData } from "~/.server/database/client";
 
 export function SelectPalette({ palettes }: { palettes: PaletteData[] }) {
   const [value, setValue] = useState(palettes[0].id.toString() as string);

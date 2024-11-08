@@ -10,8 +10,8 @@
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
     "db:nuke": "shitgen nuke --force",
-    "db:seed": "shitgen push ./database/schema.sql && tsx database/seed.ts",
-    "db:generate": "shitgen generate ./database/schema.sql --out-file ./database/client.ts",
+    "db:seed": "shitgen push ./app/.server/database/schema.sql && tsx ./app/.server/database/seed.ts",
+    "db:generate": "shitgen generate ./app/.server/database/schema.sql --out-file ./app/.server/database/client.ts",
     "pretty": "prettier 'app/**/*.{ts,tsx,js}' --write ."
   },
   "dependencies": {
@@ -31,7 +31,7 @@
     "react-dom": "^18.2.0",
     "remix-endpoint": "^0.0.5",
     "remix-utils": "^7.7.0",
-    "shitgen": "^0.0.17",
+    "shitgen": "^0.0.19",
     "tsx": "^4.19.1",
     "typed-emitter": "^2.1.0",
     "zod": "^3.23.8",

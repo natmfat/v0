@@ -1,7 +1,7 @@
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { PreviewData, shitgen } from "database/client";
 import { View } from "natmfat/components/View";
+import { PreviewData, shitgen } from "~/.server/database/client";
 import { notFound, requireTruthy } from "~/lib/utils.server";
 
 import Header from "./components/Header";

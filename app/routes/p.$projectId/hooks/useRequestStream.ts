@@ -1,6 +1,6 @@
-import { PreviewData } from "database/client";
 import invariant from "invariant";
 import { useCallback, useEffect, useRef } from "react";
+import { PreviewData } from "~/.server/database/client";
 import { createRoute } from "~/routes/api.ollama.$projectId.$version";
 import { processLines } from "~/routes/api.ollama.$projectId.$version/lib/processLines";
 
@@ -33,8 +33,6 @@ export function useRequestStream({
   );
 
   const requestStream = useCallback(async () => {
-    invariant(typeof version === "number", "expected version");
-
     if (isStreaming() || stop.current) {
       return;
     }

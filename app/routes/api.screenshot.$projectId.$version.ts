@@ -1,7 +1,7 @@
-import { shitgen } from "database/client";
 import puppeteer from "puppeteer";
 import { RemixLoader } from "remix-endpoint";
 import { z } from "zod";
+import { shitgen } from "~/.server/database/client";
 import { standard } from "~/lib/utils.server";
 
 import { createRoute as createPreviewRoute } from "./api.iframe.$projectId.$version[.html]";

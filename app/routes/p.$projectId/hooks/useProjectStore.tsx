@@ -1,7 +1,7 @@
-import { PreviewData } from "database/client";
 import { ReactNode, createContext, useContext, useEffect, useRef } from "react";
 import { create, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import { PreviewData } from "~/.server/database/client";
 import { Nullable } from "~/lib/types";
 
 import { findPreview } from "../lib/projectStoreUtils";
