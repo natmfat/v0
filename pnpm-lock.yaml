@@ -57,8 +57,8 @@ importers:
         specifier: ^7.7.0
         version: 7.7.0(@remix-run/node@2.12.1(typescript@5.6.2))(@remix-run/react@2.12.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2))(@remix-run/router@1.20.0)(react@18.3.1)(zod@3.23.8)
       shitgen:
-        specifier: ^0.0.19
-        version: 0.0.19
+        specifier: ^0.0.26
+        version: 0.0.26
       tsx:
         specifier: ^4.19.1
         version: 4.19.1
@@ -4488,8 +4488,8 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
-  shitgen@0.0.19:
-    resolution: {integrity: sha512-hUX38tFa+YaYlwlvNMMuXDkDRs7kjKnaGQPY+90eFbFOR9p1N92YwG4QOYSGF+LhYtBwSQXtZgLcL4XtBaPmKQ==}
+  shitgen@0.0.26:
+    resolution: {integrity: sha512-nyLz2ug8JqdAM3O5MC5cwhN7FDspXVar3RhvALgsToAfyPvime3Fug0apb49uv4FzufQkpbZqgedy6BuTmPw+g==}
     hasBin: true
 
   side-channel@1.0.6:
@@ -10120,7 +10120,7 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
-  shitgen@0.0.19:
+  shitgen@0.0.26:
     dependencies:
       assert: 2.1.0
       commander: 12.1.0

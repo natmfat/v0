@@ -57,6 +57,9 @@ export const loader = new RemixLoader()
       const previews = await shitgen.preview.findMany({
         select: ["code", "prompt"],
         where: { project_id },
+        orderBy: {
+          version: "DESC",
+        },
       });
       previews.pop();
 

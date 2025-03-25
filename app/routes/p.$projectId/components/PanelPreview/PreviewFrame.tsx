@@ -35,7 +35,7 @@ export function PreviewFrame({ code }: Pick<PreviewData, "code">) {
         >
           <iframe
             title="Preview Code"
-            srcDoc={generateCode(code)}
+            srcDoc={generateCode(code || "")}
             className="h-full w-full outline-none border-x border-interactive"
             sandbox="allow-scripts allow-same-origin"
           />
