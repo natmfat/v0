@@ -38,7 +38,7 @@ function App() {
           type="text"
           value={newColor}
           onChange={(e) => setNewColor(e.target.value)}
-          className="border p-2 mr-2 rounded"
+          className="border border-interactive p-2 mr-2 rounded"
           placeholder="Enter a color code (e.g., #FFFFFF)"
         />
         <button

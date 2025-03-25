@@ -25,7 +25,7 @@ export function PanelHistory() {
     >
       <View
         className={cn(
-          "flex-row items-center justify-between border-b pb-2 bg-surface z-10 flex-shrink-0",
+          "flex-row items-center justify-between border-b border-interactive pb-2 bg-surface z-10 flex-shrink-0",
           !expanded && "justify-center",
         )}
       >

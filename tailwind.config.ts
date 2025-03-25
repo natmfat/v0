@@ -1,4 +1,4 @@
-import { tailwindConfig } from "natmfat/integrations/tailwind";
+import tailwindConfig from "natmfat/integrations/tailwind.config";
 import type { Config } from "tailwindcss";
 
 export default {

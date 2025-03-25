@@ -51,14 +51,14 @@ export function PaletteThumbnail({
 }: ViewProps & { colors: PaletteData["thumbnail_colors"] }) {
   return colors ? (
     <View
-      className={cn("flex-row rounded-md overflow-hidden", className)}
+      className={cn("flex-row w-fit rounded-md overflow-hidden", className)}
       {...props}
     >
       {colors.map((color) => (
         <View
           key={color}
           style={{ backgroundColor: color }}
-          className="h-5 w-5"
+          className="h-5 w-5 flex-shrink-0 flex-grow-0"
         />
       ))}
     </View>

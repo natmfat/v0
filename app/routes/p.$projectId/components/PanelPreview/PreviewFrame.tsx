@@ -28,7 +28,7 @@ export function PreviewFrame({ code }: Pick<PreviewData, "code">) {
 
   return (
     <View className="h-full w-full max-h-full overflow-hidden flex-1 flex-row gap-2">
-      <View className="w-full h-full rounded-default overflow-hidden flex-1 border items-center px-4">
+      <View className="w-full h-full rounded-default overflow-hidden flex-1 border border-interactive items-center px-4">
         <View
           ref={containerRef}
           className={cn("h-full flex-row relative", layoutToWidth(layout))}
@@ -36,7 +36,7 @@ export function PreviewFrame({ code }: Pick<PreviewData, "code">) {
           <iframe
             title="Preview Code"
             srcDoc={generateCode(code)}
-            className="h-full w-full outline-none border-x"
+            className="h-full w-full outline-none border-x border-interactive"
             sandbox="allow-scripts allow-same-origin"
           />
 
